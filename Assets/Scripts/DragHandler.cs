@@ -4,16 +4,18 @@ using System.Collections;
 
 public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler {
 
+	// Only one object can be dragged at a time,
+	// so this attribute is static for that reason.
+	public static GameObject draggedObject;
+
 	public GameObject terrain;
 	public Transform prefab;
 
-	public static GameObject draggedObject;
 	public Vector3 startPosition;
 
 	private Transform coral;
 
 	void Awake () {
-		
 	}
 
 	public void OnBeginDrag (PointerEventData eventData) {
@@ -36,10 +38,15 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 		transform.position = startPosition;
 
 		bool placed = coral.GetComponent<SnapToTerrain>().SetLocked(true);
-		if (!placed)
-		{
-			Destroy(coral.gameObject);
+
+		// If the component was placed, then remove currency equal to the objects
+		// cost. If it wasn't, destroy the created object.
+		if (placed) {
+			GameObject.Find ("GameController").GetComponent<GameScript> ().removePolyps (100);
+		} else {
+			Destroy (coral.gameObject);
 		}
+
 		coral = null;
 		Camera.main.GetComponent<MouseOrbit>().lockCamera(false);
 	}
