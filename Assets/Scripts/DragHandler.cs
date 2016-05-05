@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
 
@@ -14,8 +15,11 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 	public Vector3 startPosition;
 
 	private Transform coral;
+	private CoralScript coralScript;
 
-	void Awake () {
+	void Start () {
+		coralScript = prefab.GetComponent<CoralScript> ();
+		GetComponent<Image> ().sprite = coralScript.icon;
 	}
 
 	public void OnBeginDrag (PointerEventData eventData) {
@@ -42,7 +46,7 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 		// If the component was placed, then remove currency equal to the objects
 		// cost. If it wasn't, destroy the created object.
 		if (placed) {
-			GameObject.Find ("GameController").GetComponent<GameScript> ().removePolyps (100);
+			GameObject.Find ("GameController").GetComponent<GameScript> ().removePolyps (coralScript.getCost());
 		} else {
 			Destroy (coral.gameObject);
 		}
