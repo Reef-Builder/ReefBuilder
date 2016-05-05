@@ -17,11 +17,17 @@ public class MouseOrbit : MonoBehaviour
     public float distanceMin = 5f;
     public float distanceMax = 40f;
 
+    public bool dragging = false;
+
+    private Rigidbody rigidbody;
+
     float x = 0.0f;
     float y = 0.0f;
 
     private List<float> xDeltas;
     private List<float> yDeltas;
+
+    private float minDistanceAboveTerrain = 1;
 
     //locks the camera, e.g if we're placing a coral.
     private bool locked;
@@ -64,18 +70,24 @@ public class MouseOrbit : MonoBehaviour
         if (Application.isMobilePlatform)
         {
             Orbit(target);
-        } else
+        }
+        else
         {
             OrbitMouse(target);
         }
-       
-       
+
+
     }
 
     private void OrbitMouse(Transform target)
     {
-        if (target)
+        if (target && !dragging)
         {
+
+            float lastX = x;
+            float lastY = y;
+            float lastDistance = distance;
+
             if (Input.GetMouseButton(0))
             {
                 x += Input.GetAxis("Mouse X") * xSpeed * distance * 0.5f;
@@ -91,10 +103,19 @@ public class MouseOrbit : MonoBehaviour
             RaycastHit hit;
             if (Physics.Linecast(target.position, transform.position, out hit))
             {
-               // distance -= hit.distance;
+                 distance -= hit.distance;
             }
             Vector3 negDistance = new Vector3(0.0f, 0.0f, -distance);
             Vector3 position = rotation * negDistance + target.position;
+      
+            if (isTooCloseToObject(position) && position.y < transform.position.y)
+            {
+                //Get rid of changes if we're too close to terrain.
+                x = lastX;
+                y = lastY;
+                distance = lastDistance;
+                return;
+            }
 
             transform.rotation = rotation;
             transform.position = position;
@@ -105,7 +126,11 @@ public class MouseOrbit : MonoBehaviour
     {
         if (target)
         {
-      
+
+            float lastX = x;
+            float lastY = y;
+            float lastDistance = distance;
+
             Quaternion rotation = transform.rotation;
 
             if (Input.touchCount == 1)
@@ -133,17 +158,45 @@ public class MouseOrbit : MonoBehaviour
             }
             Vector3 negDistance = new Vector3(0.0f, 0.0f, -distance);
             Vector3 position = rotation * negDistance + target.position;
-   
+
+            if (isTooCloseToObject(position) && position.y < transform.position.y)
+            {
+                //Get rid of changes if we're too close to terrain.
+                x = lastX;
+                y = lastY;
+                distance = lastDistance;
+                return;
+            }
+
+
             transform.rotation = rotation;
             transform.position = position;
-          
+
         }
     }
- 
+
+    private bool isTooCloseToObject(Vector3 position)
+    {
+        float min = minDistanceAboveTerrain;
+
+        RaycastHit hit;
+        Ray downRay = new Ray(transform.position, -Vector3.up);
+        if (Physics.Raycast(downRay, out hit))
+        {
+            if(hit.distance < min)
+            {
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+
     public static float mean(List<float> values)
     {
         float sum = 0;
-        for(int i = 0; i < values.Count; i++)
+        for (int i = 0; i < values.Count; i++)
         {
             sum += values[i];
         }
