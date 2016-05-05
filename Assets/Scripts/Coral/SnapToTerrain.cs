@@ -26,12 +26,13 @@ using System.Collections;
 public class SnapToTerrain : MonoBehaviour {
 
     private bool locked = false;
+    private bool onTerrain = false;
+
     public GameObject terrain;
+    public float defaultDistanceFromCamera = 2;
 
-    private bool colliding = false;
-
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
 	
 	}
 	
@@ -66,11 +67,12 @@ public class SnapToTerrain : MonoBehaviour {
 
         //Find the 3D position of the screen point we have.  If there is terrain there lock to that, and change the angle to something appropriate (mean of normals in an area or something?).
         
-        float dist = 1000;
+        float maxDist = 1000;
+        float defaultDist = defaultDistanceFromCamera;
         RaycastHit hit;
 
         Ray ray = Camera.main.ScreenPointToRay(screenPos);
-        if (terrain.GetComponent<MeshCollider>().Raycast(ray, out hit, dist))
+        if (terrain.GetComponent<MeshCollider>().Raycast(ray, out hit, maxDist))
         {
             Vector3 point = hit.point;
             Vector3 smoothNormal = SmoothedNormal(hit);
@@ -80,6 +82,12 @@ public class SnapToTerrain : MonoBehaviour {
             
             transform.position = point;
             transform.rotation = rot;
+            onTerrain = true;
+        } else
+        {
+            Vector3 point = ray.GetPoint(defaultDist);
+            transform.position = point;
+            onTerrain = false;
         }
 
         //Debug.Log("Can place here: " + CanPlace());
@@ -90,7 +98,9 @@ public class SnapToTerrain : MonoBehaviour {
     {
         MeshCollider meshCollider = hit.collider as MeshCollider;
         if (meshCollider == null || meshCollider.sharedMesh == null)
+        {
             return hit.normal;
+        }
 
         Mesh mesh = meshCollider.sharedMesh;
         Vector3[] normals = mesh.normals;
@@ -150,6 +160,11 @@ public class SnapToTerrain : MonoBehaviour {
     */
     public bool CanPlace()
     {
+
+        if (!onTerrain)
+        {
+            return false;
+        }
 
         if (locked)
         {
