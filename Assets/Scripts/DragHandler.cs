@@ -4,18 +4,26 @@ using System.Collections;
 
 public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler {
 
+	public GameObject terrain;
+	public Transform prefab;
+
 	public static GameObject draggedObject;
 	public Vector3 startPosition;
-	public MouseOrbit mouseOrbitScript;
+
+	private Transform coral;
 
 	void Awake () {
-		mouseOrbitScript = GameObject.Find ("Main Camera").GetComponent<MouseOrbit> ();
+		
 	}
 
 	public void OnBeginDrag (PointerEventData eventData) {
-		mouseOrbitScript.lockCamera(true);
 		draggedObject = gameObject;
 		startPosition = transform.position;
+
+		coral = (Transform)Instantiate(prefab, Vector3.zero, Quaternion.identity);
+		coral.GetComponent<SnapToTerrain>().terrain = terrain;
+
+		Camera.main.GetComponent<MouseOrbit>().lockCamera(true);
 	}
 
 	public void OnDrag (PointerEventData eventData) {
@@ -24,8 +32,15 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 	}
 
 	public void OnEndDrag (PointerEventData eventData) {
-		mouseOrbitScript.lockCamera(false);
 		draggedObject = null;
 		transform.position = startPosition;
+
+		bool placed = coral.GetComponent<SnapToTerrain>().SetLocked(true);
+		if (!placed)
+		{
+			Destroy(coral.gameObject);
+		}
+		coral = null;
+		Camera.main.GetComponent<MouseOrbit>().lockCamera(false);
 	}
 }
