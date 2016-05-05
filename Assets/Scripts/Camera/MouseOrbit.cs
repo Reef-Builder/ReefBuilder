@@ -17,11 +17,17 @@ public class MouseOrbit : MonoBehaviour
     public float distanceMin = 5f;
     public float distanceMax = 40f;
 
+<<<<<<< HEAD
     public bool dragging = false;
 
     private Rigidbody rigidbody;
 
     float x = 0.0f;
+=======
+    private Rigidbody rigidbody;
+
+	float x = 0.0f;
+>>>>>>> 68d133829395335d3a139305f35d1c9bc5d02242
     float y = 0.0f;
 
     private List<float> xDeltas;
@@ -61,8 +67,7 @@ public class MouseOrbit : MonoBehaviour
 
     void LateUpdate()
     {
-
-        if (locked)
+		if (locked)
         {
             return;
         }
@@ -81,7 +86,11 @@ public class MouseOrbit : MonoBehaviour
 
     private void OrbitMouse(Transform target)
     {
+<<<<<<< HEAD
         if (target && !dragging)
+=======
+		if (target)
+>>>>>>> 68d133829395335d3a139305f35d1c9bc5d02242
         {
 
             float lastX = x;
