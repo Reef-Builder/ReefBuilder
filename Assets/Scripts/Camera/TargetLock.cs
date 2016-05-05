@@ -27,8 +27,12 @@ public class TargetLock : MonoBehaviour {
 
             if (Physics.Raycast(ray, out hit, 100))
             {
-                GetComponent<MouseOrbit>().target = hit.transform.gameObject.transform;
-                Debug.Log(hit.transform.gameObject.name);
+                //If it's the right kind of object..
+                if(hit.transform.GetComponent<CameraCanSnapTo>() != null)
+                {
+                    GetComponent<MouseOrbit>().target = hit.transform.gameObject.transform;
+                    Debug.Log(hit.transform.gameObject.name);
+                }
             }
         }
 

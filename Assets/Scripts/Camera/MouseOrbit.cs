@@ -17,13 +17,14 @@ public class MouseOrbit : MonoBehaviour
     public float distanceMin = 5f;
     public float distanceMax = 40f;
 
-    private Rigidbody rigidbody;
-
     float x = 0.0f;
     float y = 0.0f;
 
     private List<float> xDeltas;
     private List<float> yDeltas;
+
+    //locks the camera, e.g if we're placing a coral.
+    private bool locked;
 
     // Use this for initialization
     void Start()
@@ -42,18 +43,24 @@ public class MouseOrbit : MonoBehaviour
         x = angles.y;
         y = angles.x;
 
-        rigidbody = GetComponent<Rigidbody>();
+        Rigidbody rb = GetComponent<Rigidbody>();
 
         // Make the rigid body not change rotation
-        if (rigidbody != null)
+        if (rb != null)
         {
-            rigidbody.freezeRotation = true;
+            rb.freezeRotation = true;
         }
         Orbit(target);
     }
 
     void LateUpdate()
     {
+
+        if (locked)
+        {
+            return;
+        }
+
         if (Application.isMobilePlatform)
         {
             Orbit(target);
@@ -152,4 +159,10 @@ public class MouseOrbit : MonoBehaviour
             angle -= 360F;
         return Mathf.Clamp(angle, min, max);
     }
+
+    public void lockCamera(bool locked)
+    {
+        this.locked = locked;
+    }
+
 }
