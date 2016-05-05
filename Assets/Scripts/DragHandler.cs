@@ -13,17 +13,18 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 	}
 
 	public void OnBeginDrag (PointerEventData eventData) {
-		mouseOrbitScript.dragging = true;
+		mouseOrbitScript.lockCamera(true);
 		draggedObject = gameObject;
 		startPosition = transform.position;
 	}
 
 	public void OnDrag (PointerEventData eventData) {
-		transform.position = Input.mousePosition;
+		// This needs to be here to maintain the drag, otherwise it
+		// ends immediately.
 	}
 
 	public void OnEndDrag (PointerEventData eventData) {
-		mouseOrbitScript.dragging = false;
+		mouseOrbitScript.lockCamera(false);
 		draggedObject = null;
 		transform.position = startPosition;
 	}
