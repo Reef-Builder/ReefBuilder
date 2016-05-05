@@ -17,6 +17,8 @@ public class MouseOrbit : MonoBehaviour
     public float distanceMin = 5f;
     public float distanceMax = 40f;
 
+	public bool dragging = false;
+
     private Rigidbody rigidbody;
 
     float x = 0.0f;
@@ -67,7 +69,7 @@ public class MouseOrbit : MonoBehaviour
 
     private void OrbitMouse(Transform target)
     {
-        if (target)
+		if (target && !dragging)
         {
             if (Input.GetMouseButton(0))
             {
