@@ -1,21 +1,35 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
 
 public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler {
 
+	// Only one object can be dragged at a time,
+	// so this attribute is static for that reason.
 	public static GameObject draggedObject;
-	public Vector3 startPosition;
-	public MouseOrbit mouseOrbitScript;
 
-	void Awake () {
-		mouseOrbitScript = GameObject.Find ("Main Camera").GetComponent<MouseOrbit> ();
+	public GameObject terrain;
+	public Transform prefab;
+
+	public Vector3 startPosition;
+
+	private Transform coral;
+	private CoralScript coralScript;
+
+	void Start () {
+		coralScript = prefab.GetComponent<CoralScript> ();
+		GetComponent<Image> ().sprite = coralScript.icon;
 	}
 
 	public void OnBeginDrag (PointerEventData eventData) {
-		mouseOrbitScript.lockCamera(true);
 		draggedObject = gameObject;
 		startPosition = transform.position;
+
+		coral = (Transform)Instantiate(prefab, Vector3.zero, Quaternion.identity);
+		coral.GetComponent<SnapToTerrain>().terrain = terrain;
+
+		Camera.main.GetComponent<MouseOrbit>().lockCamera(true);
 	}
 
 	public void OnDrag (PointerEventData eventData) {
@@ -24,8 +38,20 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 	}
 
 	public void OnEndDrag (PointerEventData eventData) {
-		mouseOrbitScript.lockCamera(false);
 		draggedObject = null;
 		transform.position = startPosition;
+
+		bool placed = coral.GetComponent<SnapToTerrain>().SetLocked(true);
+
+		// If the component was placed, then remove currency equal to the objects
+		// cost. If it wasn't, destroy the created object.
+		if (placed) {
+			GameObject.Find ("GameController").GetComponent<GameScript> ().removePolyps (coralScript.getCost());
+		} else {
+			Destroy (coral.gameObject);
+		}
+
+		coral = null;
+		Camera.main.GetComponent<MouseOrbit>().lockCamera(false);
 	}
 }
