@@ -18,7 +18,7 @@ public class GameScript : MonoBehaviour {
 
 	// The tick variable causes the Games internal counter to increase by 1 
 	// every 10 seconds.
-	private TimeSpan tick = new TimeSpan(100000000);
+	private TimeSpan tick = new TimeSpan(10000000);
 
 	// This is the internal gameCounter. This can be used to trigger certain things
 	// when gameCounter reaches X. The gameCounter can also be tracked separately,

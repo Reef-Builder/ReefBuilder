@@ -14,12 +14,15 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
 	public Vector3 startPosition;
 
+	public Text costText;
+
 	private Transform coral;
 	private CoralScript coralScript;
 
 	void Start () {
 		coralScript = prefab.GetComponent<CoralScript> ();
 		GetComponent<Image> ().sprite = coralScript.icon;
+		costText.text = "" + coralScript.cost;
 	}
 
 	public void OnBeginDrag (PointerEventData eventData) {
