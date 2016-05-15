@@ -72,22 +72,34 @@ public class SnapToTerrain : MonoBehaviour {
         RaycastHit hit;
 
         Ray ray = Camera.main.ScreenPointToRay(screenPos);
-        if (terrain.GetComponent<MeshCollider>().Raycast(ray, out hit, maxDist))
+
+        GameObject[] rocks = GameObject.FindGameObjectsWithTag("Rock");
+
+        float minDist = float.MaxValue;
+
+        foreach(GameObject terrain in rocks)
         {
-            Vector3 point = hit.point;
-            Vector3 smoothNormal = SmoothedNormal(hit);
-            //Point now contains the point on the terrain that we want to place our object.  
-            //We should now get the rotation to plce our object with, that is, that normals of the area of the terrain.
-            Quaternion rot = Quaternion.LookRotation(smoothNormal, Vector3.up);
-            
-            transform.position = point;
-            transform.rotation = rot;
-            onTerrain = true;
-        } else
+            if (terrain.GetComponent<MeshCollider>().Raycast(ray, out hit, maxDist) && hit.distance < minDist)
+            {
+
+                minDist = hit.distance;
+
+                Vector3 point = hit.point;
+                Vector3 smoothNormal = SmoothedNormal(hit);
+                //Point now contains the point on the terrain that we want to place our object.  
+                //We should now get the rotation to plce our object with, that is, that normals of the area of the terrain.
+                Quaternion rot = Quaternion.LookRotation(smoothNormal, Vector3.up);
+
+                transform.position = point;
+                transform.rotation = rot;
+                onTerrain = true;
+            }   
+        }
+
+        if (!onTerrain)
         {
             Vector3 point = ray.GetPoint(defaultDist);
             transform.position = point;
-            onTerrain = false;
         }
 
         //Debug.Log("Can place here: " + CanPlace());
