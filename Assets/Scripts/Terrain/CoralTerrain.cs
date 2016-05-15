@@ -11,15 +11,11 @@ using System.Collections;
 */
 public class CoralTerrain : MonoBehaviour {
 
-   void Start()
-    {
+	void Start() {
+		
+	}
 
-    }
-
-    void Update()
-    {
-
-    }
-
-
+	void Update() {
+		
+	}
 }
