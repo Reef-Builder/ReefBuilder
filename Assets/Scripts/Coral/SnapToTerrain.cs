@@ -34,6 +34,9 @@ public class SnapToTerrain : MonoBehaviour {
 	public Vector3 initialEulerRotation = new Vector3 (0, 0, 0);
 	public Vector3 positionOffset = new Vector3(0, 0, 0);
 
+	private float rotationSpeed = 50f;
+	private float rotAroundForward = 0f;
+
     // Use this for initialization
     void Start () {
 	
@@ -96,6 +99,7 @@ public class SnapToTerrain : MonoBehaviour {
                 transform.position = point;
                 transform.rotation = rot;
 				transform.Rotate (initialEulerRotation);
+				transform.RotateAround (transform.position, smoothNormal, rotAroundForward += rotationSpeed * Time.deltaTime);
 				transform.Translate (positionOffset);
                 onTerrain = true;
             }   
