@@ -24,7 +24,7 @@ public class CoralTerrain : MonoBehaviour {
 	}
 
 	void FixedUpdate() {
-        print(Input.GetAxis("Vertical"));
+
         if (Input.GetAxis("Vertical") > 0 && transform.position.y < maxHeight)
         {
             transform.Translate(moveVec);
