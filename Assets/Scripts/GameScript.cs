@@ -9,6 +9,11 @@ using System.Collections;
  */
 public class GameScript : MonoBehaviour {
 
+	// This is the text to update with the players currency amount.
+	public Text polypText;
+	// This is the text for the deletion toggle button.
+	public Text deleteText; 
+
 	// Keep this private so that only the GameScript can modify it.
 	// This forces things to modify the polyps count through the provided
 	// methods, which allows the text to be updated only when it needs to be.
@@ -25,7 +30,7 @@ public class GameScript : MonoBehaviour {
 	// for example to trigger Y when gameCounter increases by X.
 	private int gameCounter = 0;
 
-	public Text polypText;
+	private bool deleteMode = false;
 
 	// Use this for initialization
 	void Start () {
@@ -58,11 +63,24 @@ public class GameScript : MonoBehaviour {
 	public void removePolyps(int count) {
 		polyps = polyps - count;
 		polypText.text = "" + polyps;
-
 	}
 
 	public int getGameCounter() {
 		return gameCounter;
+	}
+
+	public bool getDeleteMode() {
+		return deleteMode;
+	}
+
+	public void toggleDeleteMode() {
+		deleteMode = !deleteMode;
+
+		if (deleteMode) {
+			deleteText.text = "Place Coral";
+		} else {
+			deleteText.text = "Delete Coral";
+		}
 	}
 
 }
