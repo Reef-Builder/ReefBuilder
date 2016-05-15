@@ -32,10 +32,12 @@ public class CoralScript : MonoBehaviour {
 	// waiting to be spawned if this is false.
 	private bool fishSpawned = false;
 
-	private int growRate = 100;
+	private int growRate = 20;
 	private int growCounter;
+	private Vector3 originalScale;
 	private float growIncrement = 0.1f;
-	private float maxScale = 1.0f;
+	private float relativeSize = 1.0f;
+	private float maxScale = 2.0f;
 
 	// Use this for initialization
 	void Start () {
@@ -43,6 +45,7 @@ public class CoralScript : MonoBehaviour {
 		spawnCounter = gameScript.getGameCounter ();
 		fishCounter = spawnCounter;
 		growCounter = gameScript.getGameCounter ();
+		originalScale = transform.localScale;
 	}
 	
 	// Update is called once per frame
@@ -60,13 +63,14 @@ public class CoralScript : MonoBehaviour {
 			gameScript.addPolyps (spawnAmount);
 		}
 
-		if ((transform.localScale.x <= maxScale) && (gameCounter - growCounter) > growRate) {
+		if ((relativeSize < maxScale) && (gameCounter - growCounter) >= growRate) {
 			growCounter = gameCounter;
 
-			Vector3 scale = transform.localScale;
+			//Vector3 scale = transform.localScale;
 
-			scale = new Vector3 (scale.x + growIncrement, scale.y + growIncrement, scale.z + growIncrement);
-			transform.localScale = scale;
+			//scale = new Vector3 (scale.x + growIncrement, scale.y + growIncrement, scale.z + growIncrement);
+			transform.localScale = originalScale * relativeSize;
+			relativeSize = relativeSize + growIncrement;
 		}
 	}
 
