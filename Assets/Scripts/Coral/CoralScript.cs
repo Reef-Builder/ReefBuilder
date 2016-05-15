@@ -18,9 +18,15 @@ public class CoralScript : MonoBehaviour {
 	private GameScript gameScript;
 	private int internalCounter = 0;
 
+	private int growRate = 100;
+	private int growCounter;
+	private float growIncrement = 0.1f;
+	private float maxScale = 1.0f;
+
 	// Use this for initialization
 	void Start () {
 		gameScript = GameObject.Find ("GameController").GetComponent<GameScript> ();
+		growCounter = gameScript.getGameCounter ();
 	}
 	
 	// Update is called once per frame
@@ -30,6 +36,15 @@ public class CoralScript : MonoBehaviour {
 			internalCounter = gameCounter;
 
 			gameScript.addPolyps (spawnAmount);
+		}
+
+		if ((transform.localScale.x <= maxScale) && (gameCounter - growCounter) > growRate) {
+			growCounter = gameCounter;
+
+			Vector3 scale = transform.localScale;
+
+			scale = new Vector3 (scale.x + growIncrement, scale.y + growIncrement, scale.z + growIncrement);
+			transform.localScale = scale;
 		}
 	}
 
