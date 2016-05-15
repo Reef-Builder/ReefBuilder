@@ -20,20 +20,33 @@ public class TargetLock : MonoBehaviour {
             init = true;
         }
 
-        if (init && !Input.GetMouseButtonDown(0) && (Input.mousePosition - touchPos).magnitude < 5)
+        if (init && !Input.GetMouseButton(0) && (Input.mousePosition - touchPos).magnitude < 5)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit, 100))
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+       
+            RaycastHit[] rays = Physics.RaycastAll(ray, 1000);
+            float minDist = float.MaxValue;
+            Transform closest = null;
+
+            foreach(RaycastHit hit in rays)
             {
                 //If it's the right kind of object..
-                if(hit.transform.GetComponent<CameraCanSnapTo>() != null)
+                if (hit.transform.GetComponent<CameraCanSnapTo>() != null)
                 {
-                    GetComponent<MouseOrbit>().target = hit.transform.gameObject.transform;
-                    Debug.Log(hit.transform.gameObject.name);
+                   if(hit.distance < minDist)
+                    {
+                        minDist = hit.distance;
+                        closest = hit.transform;
+                    }
                 }
             }
+            if (closest != null && closest != Camera.main.GetComponent<MouseOrbit>().target)
+            {
+                Camera.main.GetComponent<MouseOrbit>().target = closest;
+                Camera.main.GetComponent<MouseOrbit>().distance = 15;
+            }
+
         }
 
      
