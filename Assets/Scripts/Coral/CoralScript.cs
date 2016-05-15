@@ -32,11 +32,17 @@ public class CoralScript : MonoBehaviour {
 	// waiting to be spawned if this is false.
 	private bool fishSpawned = false;
 
+	private int growRate = 100;
+	private int growCounter;
+	private float growIncrement = 0.1f;
+	private float maxScale = 1.0f;
+
 	// Use this for initialization
 	void Start () {
 		gameScript = GameObject.Find ("GameController").GetComponent<GameScript> ();
 		spawnCounter = gameScript.getGameCounter ();
 		fishCounter = spawnCounter;
+		growCounter = gameScript.getGameCounter ();
 	}
 	
 	// Update is called once per frame
@@ -53,17 +59,33 @@ public class CoralScript : MonoBehaviour {
 			spawnCounter = gameCounter;
 			gameScript.addPolyps (spawnAmount);
 		}
+
+		if ((transform.localScale.x <= maxScale) && (gameCounter - growCounter) > growRate) {
+			growCounter = gameCounter;
+
+			Vector3 scale = transform.localScale;
+
+			scale = new Vector3 (scale.x + growIncrement, scale.y + growIncrement, scale.z + growIncrement);
+			transform.localScale = scale;
+		}
 	}
 
 	public int getCost() {
 		return cost;
 	}
-
+		
 	private void spawnFish() {
 		fish = (Transform)Instantiate (fishPrefab, Vector3.zero, Quaternion.identity);
 
 		print (fish);
 
 		fishSpawned = true;
+	}
+
+	public void OnMouseOver() {
+		if(Input.GetMouseButtonDown(0) && gameScript.getDeleteMode()) {
+			gameScript.addPolyps ((cost / 2));
+			Destroy (gameObject);
+		}
 	}
 }
