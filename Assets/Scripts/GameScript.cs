@@ -66,6 +66,10 @@ public class GameScript : MonoBehaviour {
 		polypText.text = "" + polyps;
 	}
 
+	public int getPolyps() {
+		return polyps;
+	}
+
 	public int getGameCounter() {
 		return gameCounter;
 	}

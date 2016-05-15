@@ -16,6 +16,7 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
 	public Text costText;
 
+	private Image image;
 	private Transform coral;
 	private GameScript gameScript;
 	private CoralScript coralScript;
@@ -23,13 +24,22 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 	void Start () {
 		gameScript = GameObject.Find ("GameController").GetComponent<GameScript> ();
 		coralScript = prefab.GetComponent<CoralScript> ();
-		GetComponent<Image> ().sprite = coralScript.icon;
-		costText.text = "" + coralScript.cost;
+		image = GetComponent<Image> ();
+		image.sprite = coralScript.icon;
+		costText.text = "" + coralScript.getCost();
+	}
+
+	public void Update() {
+		if (gameScript.getPolyps () < coralScript.getCost ()) {
+			image.color = Color.black;
+		} else {
+			image.color = Color.white;
+		}
 	}
 
 	public void OnBeginDrag (PointerEventData eventData) {
 		// While in deletion mode, preventing placing objects
-		if (gameScript.getDeleteMode ()) {
+		if (gameScript.getDeleteMode () || (gameScript.getPolyps() < coralScript.getCost())) {
 			return;
 		}
 
@@ -49,7 +59,7 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
 	public void OnEndDrag (PointerEventData eventData) {
 		// While in deletion mode, preventing placing objects
-		if (gameScript.getDeleteMode ()) {
+		if (gameScript.getDeleteMode () || (gameScript.getPolyps() < coralScript.getCost())) {
 			return;
 		}
 
