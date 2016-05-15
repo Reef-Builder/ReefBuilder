@@ -31,6 +31,9 @@ public class SnapToTerrain : MonoBehaviour {
     public GameObject terrain;
     public float defaultDistanceFromCamera = 2;
 
+	public Vector3 initialEulerRotation = new Vector3 (0, 0, 0);
+	public Vector3 positionOffset = new Vector3(0, 0, 0);
+
     // Use this for initialization
     void Start () {
 	
@@ -92,6 +95,8 @@ public class SnapToTerrain : MonoBehaviour {
 
                 transform.position = point;
                 transform.rotation = rot;
+				transform.Rotate (initialEulerRotation);
+				transform.Translate (positionOffset);
                 onTerrain = true;
             }   
         }
