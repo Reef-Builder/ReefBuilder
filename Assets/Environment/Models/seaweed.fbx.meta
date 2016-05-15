@@ -1,0 +1,135 @@
+fileFormatVersion: 2
+guid: 0efed4f8258134a35a74213112a1b3a3
+timeCreated: 1463283309
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: leaf1
+    100002: leaf1 1
+    100004: leaf1_1
+    100006: leaf1_2
+    100008: leaf1_3
+    100010: leaf2
+    100012: leaf2_1
+    100014: leaf2_2
+    100016: leaf2_3
+    100018: leaf3
+    100020: leaf3_1
+    100022: leaf3_2
+    100024: leaf3_3
+    100026: leaf4
+    100028: leaf4 1
+    100030: leaf4_1
+    100032: leaf4_2
+    100034: leaf4_3
+    100036: pCylinder2
+    100038: pCylinder3
+    100040: pCylinder4
+    100042: pCylinder5
+    100044: root
+    100046: Seaweed
+    100048: //RootNode
+    100050: transform154
+    100052: transform155
+    100054: transform156
+    100056: transform157
+    100058: transform158
+    400000: leaf1
+    400002: leaf1 1
+    400004: leaf1_1
+    400006: leaf1_2
+    400008: leaf1_3
+    400010: leaf2
+    400012: leaf2_1
+    400014: leaf2_2
+    400016: leaf2_3
+    400018: leaf3
+    400020: leaf3_1
+    400022: leaf3_2
+    400024: leaf3_3
+    400026: leaf4
+    400028: leaf4 1
+    400030: leaf4_1
+    400032: leaf4_2
+    400034: leaf4_3
+    400036: pCylinder2
+    400038: pCylinder3
+    400040: pCylinder4
+    400042: pCylinder5
+    400044: root
+    400046: Seaweed
+    400048: //RootNode
+    400050: transform154
+    400052: transform155
+    400054: transform156
+    400056: transform157
+    400058: transform158
+    4300000: Seaweed
+    7400000: Take 001
+    9500000: //RootNode
+    13700000: Seaweed
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleRotations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
