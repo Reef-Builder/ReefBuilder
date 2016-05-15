@@ -36,4 +36,11 @@ public class CoralScript : MonoBehaviour {
 	public int getCost() {
 		return cost;
 	}
+
+	public void OnMouseOver() {
+		if(Input.GetMouseButtonDown(0) && gameScript.getDeleteMode()) {
+			gameScript.addPolyps ((cost / 2));
+			Destroy (gameObject);
+		}
+	}
 }
