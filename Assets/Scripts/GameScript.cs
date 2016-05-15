@@ -17,7 +17,7 @@ public class GameScript : MonoBehaviour {
 	// Keep this private so that only the GameScript can modify it.
 	// This forces things to modify the polyps count through the provided
 	// methods, which allows the text to be updated only when it needs to be.
-	private int polyps = 1000;
+	private int polyps = 200;
 	private DateTime currentTime;
 	private DateTime lastTime;
 
