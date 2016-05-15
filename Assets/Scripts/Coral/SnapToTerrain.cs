@@ -79,7 +79,7 @@ public class SnapToTerrain : MonoBehaviour {
         GameObject[] rocks = GameObject.FindGameObjectsWithTag("Rock");
 
         float minDist = float.MaxValue;
-
+		onTerrain = false;
         foreach(GameObject terrain in rocks)
         {
             if (terrain.GetComponent<MeshCollider>().Raycast(ray, out hit, maxDist) && hit.distance < minDist)
@@ -113,6 +113,7 @@ public class SnapToTerrain : MonoBehaviour {
 
     public Vector3 SmoothedNormal(RaycastHit hit)
     {
+
         MeshCollider meshCollider = hit.collider as MeshCollider;
         if (meshCollider == null || meshCollider.sharedMesh == null)
         {
@@ -130,6 +131,14 @@ public class SnapToTerrain : MonoBehaviour {
         interpolatedNormal = interpolatedNormal.normalized;
         Transform hitTransform = hit.collider.transform;
         interpolatedNormal = hitTransform.TransformDirection(interpolatedNormal);
+
+		if ((interpolatedNormal - hit.normal).magnitude > 0.3f) {
+
+			return hit.normal;
+
+		}
+			
+
         return interpolatedNormal;
     }
 
