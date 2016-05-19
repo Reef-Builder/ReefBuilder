@@ -33,6 +33,7 @@ public class CoralScript : MonoBehaviour {
 	// For performance reasons, only one fish will be spawned per coral. A fish is still 
 	// waiting to be spawned if this is false.
 	private bool fishSpawned = false;
+	//private bool placed = false;
 
 	private int growRate = 20;
 	private int growCounter;
@@ -52,8 +53,14 @@ public class CoralScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		int gameCounter = gameScript.getGameCounter ();
+		/*print (placed);
+		if (!placed) {
+			return;
+		}*/
 
+		print ("test");
+
+		int gameCounter = gameScript.getGameCounter ();
 
 		if(!fishSpawned && ((gameCounter - fishCounter) >= fishRate)) {
 			fishCounter = gameCounter;
@@ -72,9 +79,6 @@ public class CoralScript : MonoBehaviour {
 		if ((relativeSize < maxScale) && (gameCounter - growCounter) >= growRate) {
 			growCounter = gameCounter;
 
-			//Vector3 scale = transform.localScale;
-
-			//scale = new Vector3 (scale.x + growIncrement, scale.y + growIncrement, scale.z + growIncrement);
 			transform.localScale = originalScale * relativeSize;
 			relativeSize = relativeSize + growIncrement;
 		}
@@ -83,11 +87,16 @@ public class CoralScript : MonoBehaviour {
 	public int getCost() {
 		return cost;
 	}
-		
+
 	private void spawnFish() {
 		fish = (Transform)Instantiate (fishPrefab, Vector3.zero, Quaternion.identity);
 
 		fishSpawned = true;
+	}
+
+	public void setPlaced(bool place) {
+		print (place);
+		//placed = place;
 	}
 
 	public void OnMouseOver() {
