@@ -28,7 +28,7 @@ public class CollectPolyps : MonoBehaviour {
             clicked = true;
         }
 
-        if (clicked && !Input.GetMouseButton(0) && (Input.mousePosition - touchPos).magnitude < 5)
+        if (clicked && !Input.GetMouseButton(0) && (Input.mousePosition - touchPos).magnitude < 10)
         {
             clicked = false;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);

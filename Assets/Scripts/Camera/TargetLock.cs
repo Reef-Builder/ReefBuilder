@@ -20,7 +20,7 @@ public class TargetLock : MonoBehaviour {
             init = true;
         }
 
-        if (init && !Input.GetMouseButton(0) && (Input.mousePosition - touchPos).magnitude < 5)
+        if (init && !Input.GetMouseButton(0) && (Input.mousePosition - touchPos).magnitude < 10)
         {
 
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);

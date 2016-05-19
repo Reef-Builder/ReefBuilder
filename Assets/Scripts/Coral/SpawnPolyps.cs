@@ -10,7 +10,7 @@ public class SpawnPolyps : MonoBehaviour {
     public static int maxPolypsOnScene = 10;
     public static int hardPolypLimit = 100;
     /* Chance that the max polyp limit will be lifted - this allows for random bonus polyp drops */
-    public static float chanceOfLimitLift = 0.1f;
+    public static float chanceOfLimitLift = 0.0001f;
 
     public Transform polypPrefab;
     /* The force at which the polyps will be ejected */
@@ -21,6 +21,11 @@ public class SpawnPolyps : MonoBehaviour {
 
     private int maxObjects = 5;
     private List<Transform> polyps;
+
+    private long timeOfLastTouch = 0;
+    private long bonusTickCount = 36000000000;
+    private int bonusCount = 0;
+    private int bonusMaxCount = 10;
 
 	// Use this for initialization
 	void Start () {
@@ -38,12 +43,30 @@ public class SpawnPolyps : MonoBehaviour {
     * that are there. */
     public void createPolyps(int num){
 
+       // if(Input.anyKey || Input.touchCount > 0)
+       // {
+       //     timeOfLastTouch = System.DateTime.UtcNow.Ticks;
+       // }
+
         int totalPolyps = GameObject.FindObjectsOfType<PolypScript>().Length;
 
-        float rand = Random.Range(0, 100);
+        float rand = Random.Range(0, 10000);
         bool liftLimit = false;
     
-        if(rand < chanceOfLimitLift)
+       // //if(System.DateTime.UtcNow.Ticks - timeOfLastTouch >= bonusTickCount)
+        //{
+         //   liftLimit = true;
+         //   bonusCount++;
+
+           // if(bonusCount > bonusMaxCount)
+           // {
+              //  bonusCount = 0;
+                //liftLimit = false;
+               // timeOfLastTouch = System.DateTime.UtcNow.Ticks;
+           // }
+       // }
+
+        if(rand <= chanceOfLimitLift*10000f)
         {
             liftLimit = true;
         }
