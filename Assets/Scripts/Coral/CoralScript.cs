@@ -16,6 +16,8 @@ public class CoralScript : MonoBehaviour {
 	public int fishRate;
 	// The fish prefab which this coral should spawn.
 	public Transform fishPrefab;
+    // Add polyps manually, or auto
+    public bool manualCoralCollection;
 
 	private GameScript gameScript;
 
@@ -60,7 +62,11 @@ public class CoralScript : MonoBehaviour {
 
 		if ((gameCounter - spawnCounter) >= spawnRate) {
 			spawnCounter = gameCounter;
-			gameScript.addPolyps (spawnAmount);
+            if (manualCoralCollection) {
+                GetComponent<SpawnPolyps>().createPolyps(spawnAmount);
+            } else {
+                gameScript.addPolyps(spawnAmount * GetComponent<SpawnPolyps>().polypsPerObject);
+            }	
 		}
 
 		if ((relativeSize < maxScale) && (gameCounter - growCounter) >= growRate) {
