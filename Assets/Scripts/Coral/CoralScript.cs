@@ -58,7 +58,7 @@ public class CoralScript : MonoBehaviour {
 			return;
 		}*/
 
-		print ("test");
+		//print ("test");
 
 		int gameCounter = gameScript.getGameCounter ();
 
