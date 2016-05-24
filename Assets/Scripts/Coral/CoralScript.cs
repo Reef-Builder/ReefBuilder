@@ -80,7 +80,7 @@ public class CoralScript : MonoBehaviour {
 		
 	private void spawnFish() {
 		fish = (Transform)Instantiate (fishPrefab, Vector3.zero, Quaternion.identity);
-
+		//	gameScript.addFish (fish.gameObject);
 		fishSpawned = true;
 	}
 

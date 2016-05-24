@@ -5,10 +5,10 @@ public class TargetLock : MonoBehaviour {
 
     private Vector3 touchPos = Vector2.zero;
     private bool init = false;
-
+	private GameScript gameScript;
 	// Use this for initialization
 	void Start () {
-	
+		gameScript = GameObject.Find ("GameController").GetComponent<GameScript> ();
 	}
 	
 	// Update is called once per frame
@@ -43,7 +43,14 @@ public class TargetLock : MonoBehaviour {
             }
             if (closest != null && closest != Camera.main.GetComponent<MouseOrbit>().target)
             {
-                Camera.main.GetComponent<MouseOrbit>().target = closest;
+				Debug.Log (closest.name);
+				if (closest.name == "CenterObject") {
+					gameScript.buildMode ();
+				} else {
+					gameScript.focusMode (closest.gameObject);
+				}
+
+				Camera.main.GetComponent<MouseOrbit>().target = closest;
                 Camera.main.GetComponent<MouseOrbit>().distance = 15;
             }
 
