@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MoveRandomPaths : MonoBehaviour {
+[System.Serializable]
+public class FishScript : MonoBehaviour {
 
     private float speed = 10;
     public float minSpeed = 10;

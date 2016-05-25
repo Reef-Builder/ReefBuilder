@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
+[System.Serializable]
 public class CoralScript : MonoBehaviour {
 
 	// The UI icon to display for this coral.
@@ -90,8 +91,9 @@ public class CoralScript : MonoBehaviour {
 
 	private void spawnFish() {
 		fish = (Transform)Instantiate (fishPrefab, Vector3.zero, Quaternion.identity);
-
 		fishSpawned = true;
+
+		gameScript.addFish (fish.GetComponent<FishScript> ());
 	}
 
 	public void setPlaced(bool place) {

@@ -2,11 +2,13 @@
 using UnityEngine.UI;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 /**
  * This script handles the main game objects, including the players currency and
  * the tracking of time.
  */
+[System.Serializable]
 public class GameScript : MonoBehaviour {
 
 	// This is the text to update with the players currency amount.
@@ -32,6 +34,9 @@ public class GameScript : MonoBehaviour {
 	private int gameCounter = 0;
 
 	private bool deleteMode = false;
+
+	private List<CoralScript> coral = new List<CoralScript> ();
+	private List<FishScript> fish = new List<FishScript> ();
 
 	// Use this for initialization
 	void Start () {
@@ -86,6 +91,14 @@ public class GameScript : MonoBehaviour {
 		} else {
 			deleteText.text = "Delete Coral";
 		}
+	}
+
+	public void addCoral(CoralScript coral) {
+		this.coral.Add (coral);
+	}
+
+	public void addFish(FishScript fish) {
+		this.fish.Add (fish);
 	}
 
 }
