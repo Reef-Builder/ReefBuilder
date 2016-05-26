@@ -74,6 +74,16 @@ public class GameScript : MonoBehaviour {
 			gameCounter++;
 			lastTime = currentTime;
 		}
+
+
+		if (gameCounter % 100 ==0) {
+			fishEatAI ();
+		
+		}
+	
+	
+	
+	
 	}
 
 	public void addPolyps(int count) {
@@ -141,13 +151,16 @@ public class GameScript : MonoBehaviour {
 
 
 	public void fishEatAI(){
-			
-		int f = (int)UnityEngine.Random.Range(0, fishs.Capacity);
-		GameObject fish = fishs [f];
-		int c =(int) UnityEngine.Random.Range (0, corals.Capacity);
-		GameObject coral = fishs [c];
+		if (fishs.Count ==0) {
+			return;
+		}	
 
-	
+		int f = (int)UnityEngine.Random.Range(0, fishs.Count);
+		GameObject fish = fishs [f];
+		int c =(int) UnityEngine.Random.Range (0, corals.Count);
+		GameObject coral = fishs [c];
+		fish.GetComponent<MoveRandomPaths> ().SendMessage ("setTarget", coral.transform);
+		Debug.Log ("Fish EAT AI trigged");
 	
 	}
 
