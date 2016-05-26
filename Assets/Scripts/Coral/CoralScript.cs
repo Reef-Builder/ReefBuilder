@@ -46,6 +46,7 @@ public class CoralScript : MonoBehaviour {
 		fishCounter = spawnCounter;
 		growCounter = gameScript.getGameCounter ();
 		originalScale = transform.localScale;
+		gameScript.addCoral (gameObject);
 	}
 	
 	// Update is called once per frame
@@ -80,7 +81,7 @@ public class CoralScript : MonoBehaviour {
 		
 	private void spawnFish() {
 		fish = (Transform)Instantiate (fishPrefab, Vector3.zero, Quaternion.identity);
-		//	gameScript.addFish (fish.gameObject);
+		gameScript.addFish (fish.gameObject);
 		fishSpawned = true;
 	}
 

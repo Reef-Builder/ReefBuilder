@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+
 /**
  * This script handles the main game objects, including the players currency and
  * the tracking of time.
@@ -35,7 +36,7 @@ public class GameScript : MonoBehaviour {
 
 	//Used to keep track of the different fish types already sqawn in the game.
 	private List<String> fishTypes = new List<String>();
-
+	private List<GameObject> fishs = new List<GameObject> ();
 	private  const  int BUILDMODE = 0;
 	private  const int FOCUSMODE = 1;
 	private int mode=BUILDMODE;
@@ -47,6 +48,7 @@ public class GameScript : MonoBehaviour {
 	// Use this for initialization
 	private GameObject selected;
 
+	private List<GameObject> corals = new List<GameObject> ();
 
 	void Start () {
 		polypText.text = "" + polyps;
@@ -126,6 +128,28 @@ public class GameScript : MonoBehaviour {
 		selected = null;
 	}
 
+	public void addCoral(GameObject coral){
+			corals.Add (coral);
+	}
+
+	public void addFish(GameObject fish){
+
+		fishs.Add (fish);
+		fishTypes.Add (fish.name);
+	}
+
+
+
+	public void fishEatAI(){
+			
+		int f = (int)UnityEngine.Random.Range(0, fishs.Capacity);
+		GameObject fish = fishs [f];
+		int c =(int) UnityEngine.Random.Range (0, corals.Capacity);
+		GameObject coral = fishs [c];
+
+	
+	
+	}
 
 
 
