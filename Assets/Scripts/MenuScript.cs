@@ -19,7 +19,10 @@ public class MenuScript : MonoBehaviour {
 	}
 
 	public void LoadGame() {
-		
+		SaveLoad.Save ();
+		print (SaveLoad.savedGames);
+		SaveLoad.Load ();
+		print (SaveLoad.savedGames);
 	}
 
 	public void ExitGame() {

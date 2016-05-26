@@ -11,6 +11,8 @@ using System.Collections.Generic;
 [System.Serializable]
 public class GameScript : MonoBehaviour {
 
+	public static GameScript current;
+
 	// This is the text to update with the players currency amount.
 	public Text polypText;
 	// This is the text for the deletion toggle button.
