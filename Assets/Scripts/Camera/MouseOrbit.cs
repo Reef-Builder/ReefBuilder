@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
 [AddComponentMenu("Camera-Control/Mouse Orbit with zoom")]
 public class MouseOrbit : MonoBehaviour
@@ -59,6 +60,11 @@ public class MouseOrbit : MonoBehaviour
 
     void LateUpdate()
     {
+
+		if (EventSystem.current.IsPointerOverGameObject()) { 
+			return;
+		}
+
 		if (locked)
         {
             return;
