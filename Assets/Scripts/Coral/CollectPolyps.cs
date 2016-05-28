@@ -13,6 +13,8 @@ public class CollectPolyps : MonoBehaviour {
     public List<Transform> collectingPolyps;
     private float collectSpeed = 10;
 
+    private Vector3 distFromCam = new Vector3(0, 0, 5);
+
     // Use this for initialization
     void Start () {
         gameScript = GameObject.Find("GameController").GetComponent<GameScript>();
@@ -40,6 +42,7 @@ public class CollectPolyps : MonoBehaviour {
                 //If it's the right kind of object..
                 if (hit.transform.GetComponent<PolypScript>() != null)
                 {
+                    hit.transform.SetParent(Camera.main.transform);
                     collectingPolyps.Add(hit.transform);
                 }
             }
@@ -52,13 +55,22 @@ public class CollectPolyps : MonoBehaviour {
                 collectingPolyps.RemoveAt(i);
                 continue;
             }
-            Vector3 uiPosition = polypCountElement.position;
+            // Vector3 uiPosition = polypCountElement.position;
 
-            float distance = (collectingPolyps[i].position - uiPosition).magnitude;
+            // float distance = (collectingPolyps[i].position - uiPosition).magnitude;
 
-            collectingPolyps[i].transform.position = Vector3.MoveTowards(collectingPolyps[i].transform.position, uiPosition, collectSpeed*Time.deltaTime);
+            //collectingPolyps[i].transform.position = Vector3.MoveTowards(collectingPolyps[i].transform.position, uiPosition, collectSpeed*Time.deltaTime);
 
-            if(distance < 1)
+            Vector3 screenPoint = polypCountElement.transform.position + distFromCam;
+            Vector3 worldPos = Camera.main.ScreenToWorldPoint(screenPoint);
+            collectingPolyps[i].transform.position = Vector3.MoveTowards(collectingPolyps[i].transform.position, worldPos, collectSpeed*Time.deltaTime);
+            if (collectingPolyps[i].transform.localScale.x > 0.1f)
+            {
+                collectingPolyps[i].transform.localScale = collectingPolyps[i].transform.localScale - (collectSpeed * Vector3.one) * Time.deltaTime * 0.005f;
+            }
+            float distance = (collectingPolyps[i].position - worldPos).magnitude;
+
+            if (distance < 0.1f)
             { 
                 gameScript.addPolyps(collectingPolyps[i].GetComponent<PolypScript>().GetPolypsRecieved());
                 Transform t = collectingPolyps[i];
