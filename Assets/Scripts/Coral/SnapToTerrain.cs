@@ -34,10 +34,14 @@ public class SnapToTerrain : MonoBehaviour {
 	public Vector3 initialEulerRotation = new Vector3 (0, 0, 0);
 	public Vector3 positionOffset = new Vector3(0, 0, 0);
 
+    //Vector to use for locking Z axis
+    private Vector3 LOCK_Z = new Vector3(1, 1, 0);
+
     private Vector2 mobileDragOffset = new Vector2(0, Screen.height/10f);
 
 	private float rotationSpeed = 50f;
 	private float rotAroundForward = 0f;
+
 
     // Use this for initialization
     void Start () {
@@ -87,12 +91,28 @@ public class SnapToTerrain : MonoBehaviour {
 
         Ray ray = Camera.main.ScreenPointToRay(screenPos);
 
+        GameObject[] sand = null;
+
+        //If this is a rock, it can also be placed on sand.
+        if (gameObject.tag.Equals("Rock"))
+        {
+            sand = GameObject.FindGameObjectsWithTag("Sand");
+        }
+   
         GameObject[] rocks = GameObject.FindGameObjectsWithTag("Rock");
+        
 
         float minDist = float.MaxValue;
 		onTerrain = false;
-        foreach(GameObject terrain in rocks)
+
+        foreach (GameObject terrain in rocks)
         {
+
+            if(terrain == gameObject)
+            {
+                continue;
+            }
+
             if (terrain.GetComponent<MeshCollider>().Raycast(ray, out hit, maxDist) && hit.distance < minDist)
             {
 
@@ -106,12 +126,42 @@ public class SnapToTerrain : MonoBehaviour {
 
                 transform.position = point;
                 transform.rotation = rot;
-				transform.Rotate (initialEulerRotation);
-				transform.RotateAround (transform.position, smoothNormal, rotAroundForward += rotationSpeed * Time.deltaTime);
-				transform.Translate (positionOffset);
-                GetComponent<SpawnPolyps>().normal = smoothNormal;
+                transform.Rotate(initialEulerRotation);
+                transform.RotateAround(transform.position, smoothNormal, rotAroundForward += rotationSpeed * Time.deltaTime);
+                transform.Translate(positionOffset);
+                if (!gameObject.tag.Equals("Rock")) {
+                     GetComponent<SpawnPolyps>().normal = smoothNormal;
+                }
                 onTerrain = true;
             }   
+        }
+        if (sand != null)
+        {
+            foreach (GameObject terrain in sand)
+            {
+                if (terrain.GetComponent<TerrainCollider>().Raycast(ray, out hit, maxDist) && hit.distance < minDist)
+                {
+
+                    minDist = hit.distance;
+
+                    Vector3 point = hit.point;
+                    Vector3 smoothNormal = SmoothedNormal(hit);
+                    //Point now contains the point on the terrain that we want to place our object.  
+                    //We should now get the rotation to plce our object with, that is, that normals of the area of the terrain.
+                    Quaternion rot = Quaternion.LookRotation(smoothNormal, Vector3.up);
+                 
+                    transform.position = point;
+                    transform.rotation = rot;
+                    transform.Rotate(initialEulerRotation);
+                    transform.RotateAround(transform.position, smoothNormal, rotAroundForward += rotationSpeed * Time.deltaTime);
+                    transform.Translate(positionOffset);
+                    if (!gameObject.tag.Equals("Rock"))
+                    {
+                        GetComponent<SpawnPolyps>().normal = smoothNormal;
+                    }
+                    onTerrain = true;
+                }
+            }
         }
 
         if (!onTerrain)

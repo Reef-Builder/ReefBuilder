@@ -8,7 +8,7 @@ using System.Collections;
 
     Check whether objects have this script by checking that (object.GetComponent<CoralTerrain>() != null)
 
-    This script also allows the user to move the piece coral terrain lcoation around the reef that they are on, in
+    This script also allows the user to move the piece coral terrain location around the reef that they are on, in
     a maximum of two dimensions at the current time (up, down, left, right)
 
 */
