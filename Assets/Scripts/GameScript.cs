@@ -81,7 +81,9 @@ public class GameScript : MonoBehaviour {
 		
 		}
 
-
+		if (Input.GetKeyDown (KeyCode.Space)) {
+			addFossils (5);
+		}
 	}
 
 	public void addPolyps(int count) {
