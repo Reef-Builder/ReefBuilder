@@ -1,11 +1,20 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class MenuScript : MonoBehaviour {
 
+	// The menu objects to toggle between
 	public GameObject coralMenu;
 	public GameObject miscMenu;
+
+	// The toggle objects which switch between tabs
+	public GameObject coralToggle;
+	public GameObject miscToggle;
+
+	public Color activeColor;
+	public Color inactiveColor;
 
 	private bool coralMenuVisible = true;
 
@@ -45,9 +54,15 @@ public class MenuScript : MonoBehaviour {
 		if (coralMenuVisible) {
 			coralMenu.SetActive (true);
 			miscMenu.SetActive (false);
+
+			coralToggle.GetComponent<Image> ().color = activeColor;
+			miscToggle.GetComponent<Image> ().color = inactiveColor;
 		} else {
 			coralMenu.SetActive (false);
 			miscMenu.SetActive (true);
+
+			coralToggle.GetComponent<Image> ().color = inactiveColor;
+			miscToggle.GetComponent<Image> ().color = activeColor;
 		}
 	}
 }
