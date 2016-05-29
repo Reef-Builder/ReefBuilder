@@ -40,6 +40,7 @@ public class GameScript : MonoBehaviour {
 	private List<CoralScript> coral = new List<CoralScript> ();
 	private List<FishScript> fish = new List<FishScript> ();
 	private List<FishScript> eatingFish =new List<FishScript> ();
+
 //	private HashSet<FishScript> eatingFish = new HashSet<FishScript> ();
 
 	// Use this for initialization
@@ -114,6 +115,7 @@ public class GameScript : MonoBehaviour {
 
 	public void addCoral(CoralScript coral) {
 		this.coral.Add (coral);
+		SoundManager.instance.AddRandomClip ();
 	}
 
 	public void addFish(FishScript fish) {
