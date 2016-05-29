@@ -118,8 +118,8 @@ public class FishScript : MonoBehaviour {
 		transform.rotation = Quaternion.LookRotation (rot);
 		transform.Translate(0, 0, speed * Time.deltaTime);
 
-		Debug.Log ("move away");
-		Debug.DrawRay (transform.position, dir, Color.green, 5, true);
+		//Debug.Log ("move away");
+		//Debug.DrawRay (transform.position, dir, Color.green, 5, true);
 	}
 
 
@@ -137,7 +137,7 @@ public class FishScript : MonoBehaviour {
 			
 		if (hit.collider == null) {
 			randMove ();
-			Debug.Log ("returns null");
+			//Debug.Log ("returns null");
 			return;
 		}
 
@@ -145,7 +145,7 @@ public class FishScript : MonoBehaviour {
 	
 
 		if (hit.collider.gameObject.transform.position==target) {
-			Debug.Log ("ray cast hit : "+hit.collider.gameObject);
+			//Debug.Log ("ray cast hit : "+hit.collider.gameObject);
 
 			//upSpeed = (Random.Range(0, 10) > 7);
 
@@ -164,12 +164,12 @@ public class FishScript : MonoBehaviour {
 
 			if (Vector3.Distance (transform.position, target) <= eatingDis) {
 				mode = EATMODE;
-				Debug.Log ("Eat mode");
+				//Debug.Log ("Eat mode");
 			}
 
 		} else {
 			randMove ();
-			Debug.Log (hit.collider.gameObject+" in way");
+			//Debug.Log (hit.collider.gameObject+" in way");
 		
 		}
 
@@ -179,7 +179,7 @@ public class FishScript : MonoBehaviour {
 		target = v.position;
 		coral = v;
 		mode = MOVETOMODE;
-		Debug.Log ("target set: " + v);
+		//Debug.Log ("target set: " + v);
 	}
 
 	public void randFish(){
