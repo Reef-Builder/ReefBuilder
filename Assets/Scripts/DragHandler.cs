@@ -17,24 +17,31 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 	public Text costText;
 
 	private Image image;
-	private Transform coral;
+	private Transform placedObject;
 	private GameScript gameScript;
-	private Placeable coralScript;
+	private Placeable placeableScript;
+	private bool canAfford = true;
 
 	void Start () {
 		gameScript = GameObject.Find ("GameController").GetComponent<GameScript> ();
         if (prefab.tag.Equals("Rock")) {
-            coralScript = prefab.GetComponent<RockScript>();
+            placeableScript = prefab.GetComponent<RockScript>();
         } else {
-            coralScript = prefab.GetComponent<CoralScript>();
+            placeableScript = prefab.GetComponent<CoralScript>();
         }
 		image = GetComponent<Image> ();
-		image.sprite = coralScript.getIcon();
-		costText.text = "" + coralScript.getCost();
+		image.sprite = placeableScript.getIcon();
+		costText.text = "" + placeableScript.getCost();
 	}
 
 	public void Update() {
-		if (gameScript.getPolyps () < coralScript.getCost ()) {
+		if (prefab.tag.Equals ("Rock")) {
+			canAfford = (gameScript.getFossils () >= placeableScript.getCost ());
+		} else {
+			canAfford = (gameScript.getPolyps () >= placeableScript.getCost ());
+		}
+
+		if (!canAfford) {
 			image.color = Color.black;
 		} else {
 			image.color = Color.white;
@@ -43,15 +50,15 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
 	public void OnBeginDrag (PointerEventData eventData) {
 		// While in deletion mode, preventing placing objects
-		if (gameScript.getDeleteMode () || (gameScript.getPolyps() < coralScript.getCost())) {
+		if (gameScript.getDeleteMode () || !canAfford) {
 			return;
 		}
 
 		draggedObject = gameObject;
 		startPosition = transform.position;
 
-		coral = (Transform)Instantiate(prefab, Vector3.zero, Quaternion.identity);
-		coral.GetComponent<SnapToTerrain>().terrain = terrain;
+		placedObject = (Transform)Instantiate(prefab, Vector3.zero, Quaternion.identity);
+		placedObject.GetComponent<SnapToTerrain>().terrain = terrain;
 
 		Camera.main.GetComponent<MouseOrbit>().lockCamera(true);
 	}
@@ -63,29 +70,31 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
 	public void OnEndDrag (PointerEventData eventData) {
 		// While in deletion mode, preventing placing objects
-		if (gameScript.getDeleteMode () || (gameScript.getPolyps() < coralScript.getCost())) {
+		if (gameScript.getDeleteMode () || !canAfford) {
 			return;
 		}
 
 		draggedObject = null;
 		transform.position = startPosition;
 
-		bool placed = coral.GetComponent<SnapToTerrain>().SetLocked(true);
+		bool placed = placedObject.GetComponent<SnapToTerrain>().SetLocked(true);
 
 		// If the component was placed, then remove currency equal to the objects
 		// cost. If it wasn't, destroy the created object.
 		if (placed) {
-			gameScript.removePolyps (coralScript.getCost());
-			coralScript.setPlaced (true);
+			placeableScript.setPlaced (true);
 
-            if (!coral.tag.Equals("Rock")) {
-                gameScript.addCoral(coral.GetComponent<CoralScript>());
-            }
+			if (placedObject.tag.Equals ("Rock")) {
+				gameScript.removeFossils (placeableScript.getCost ());
+			} else {
+				gameScript.addCoral (placedObject.GetComponent<CoralScript> ());
+				gameScript.removePolyps (placeableScript.getCost ());
+			}
 		} else {
-			Destroy (coral.gameObject);
+			Destroy (placedObject.gameObject);
 		}
 
-		coral = null;
+		placedObject = null;
 		Camera.main.GetComponent<MouseOrbit>().lockCamera(false);
 	}
 }

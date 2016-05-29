@@ -30,4 +30,8 @@ public class RockScript : MonoBehaviour, Placeable {
     {
         
     }
+
+	public bool canPlaceOnSand() {
+		return true;
+	}
 }

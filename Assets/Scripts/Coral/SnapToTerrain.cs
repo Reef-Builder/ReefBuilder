@@ -93,8 +93,8 @@ public class SnapToTerrain : MonoBehaviour {
 
         GameObject[] sand = null;
 
-        //If this is a rock, it can also be placed on sand.
-        if (gameObject.tag.Equals("Rock"))
+        //If canPlaceOnSand returns true, it can also be placed on sand.
+		if (gameObject.GetComponent<Placeable>().canPlaceOnSand())
         {
             sand = GameObject.FindGameObjectsWithTag("Sand");
         }

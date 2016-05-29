@@ -15,6 +15,7 @@ public class GameScript : MonoBehaviour {
 
 	// This is the text to update with the players currency amount.
 	public Text polypText;
+	public Text fossilText;
 	// This is the text for the deletion toggle button.
 	public Text deleteText; 
 
@@ -22,6 +23,7 @@ public class GameScript : MonoBehaviour {
 	// This forces things to modify the polyps count through the provided
 	// methods, which allows the text to be updated only when it needs to be.
 	private int polyps = 1000;
+	private int fossils = 5;
 	private DateTime currentTime;
 	private DateTime lastTime;
 
@@ -46,6 +48,7 @@ public class GameScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		polypText.text = "" + polyps;
+		fossilText.text = "" + fossils;
 
 		// Use DateTime.Now to keep track of device time - easy!
 		// Need to implement saving/loading so that when a game is loaded, time is included.
@@ -93,6 +96,20 @@ public class GameScript : MonoBehaviour {
 
 	public int getPolyps() {
 		return polyps;
+	}
+
+	public void addFossils(int count) {
+		fossils = fossils + count;
+		fossilText.text = "" + fossils;
+	}
+
+	public void removeFossils(int count) {
+		fossils = fossils - count;
+		fossilText.text = "" + fossils;
+	}
+
+	public int getFossils() {
+		return fossils;
 	}
 
 	public int getGameCounter() {
