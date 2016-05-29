@@ -43,8 +43,10 @@ public class TargetLock : MonoBehaviour {
             }
             if (closest != null && closest != Camera.main.GetComponent<MouseOrbit>().target)
             {
-                Camera.main.GetComponent<MouseOrbit>().target = closest;
-                Camera.main.GetComponent<MouseOrbit>().distance = 15;
+                MouseOrbit orbit = Camera.main.GetComponent<MouseOrbit>();
+                orbit.FlyTo(closest);
+
+               // Camera.main.GetComponent<MouseOrbit>().distance = 15;
             }
 
         }

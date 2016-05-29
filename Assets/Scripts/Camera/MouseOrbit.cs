@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 [AddComponentMenu("Camera-Control/Mouse Orbit with zoom")]
 public class MouseOrbit : MonoBehaviour
 {
-
+    public Transform hiddenTarget;
     public Transform target;
     public float distance = 15.0f;
     public float xSpeed = 120.0f;
@@ -28,13 +28,18 @@ public class MouseOrbit : MonoBehaviour
 
     private float minDistanceAboveTerrain = 1;
 
+    private bool newTarget = false;
+    private float distToNewTarget;
+
+    private float flySpeed = 10;
+    private float lookSpeed = 5;
+
     //locks the camera, e.g if we're placing a coral.
     private bool locked;
 
     // Use this for initialization
     void Start()
     {
-
         xDeltas = new List<float>(5);
         yDeltas = new List<float>(5);
 
@@ -55,28 +60,65 @@ public class MouseOrbit : MonoBehaviour
         {
             rb.freezeRotation = true;
         }
-        Orbit(target);
+        hiddenTarget = new GameObject().transform;
+        hiddenTarget.position = target.position;
+       // newTarget = true;
+        Orbit(hiddenTarget);
     }
 
     void LateUpdate()
     {
 
-		if (EventSystem.current.IsPointerOverGameObject()) { 
-			return;
-		}
+        if (Input.GetKeyUp(KeyCode.Alpha1))
+        {
+            flySpeed = 10;
+        }
 
-		if (locked)
+        if (Input.GetKeyUp(KeyCode.Alpha2))
+        {
+            flySpeed = 100;
+        }
+
+        if (Input.GetKeyUp(KeyCode.Alpha3))
+        {
+            flySpeed = -1;
+        }
+
+        if (newTarget){
+            
+            if(flySpeed <= 0){
+                hiddenTarget.position = target.position;
+            }
+
+            float step = ((hiddenTarget.position - target.position).magnitude / distToNewTarget);
+   
+            hiddenTarget.position = Vector3.MoveTowards(hiddenTarget.position, target.position, Mathf.SmoothStep(flySpeed * 0.7f * Time.deltaTime, flySpeed * Time.deltaTime, step));
+
+            if ((hiddenTarget.position - target.position).magnitude <= 0.1f)
+            {
+                newTarget = false;
+            }
+
+          //  return;
+        }
+
+        if (!newTarget && EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+
+		if (locked && !newTarget)
         {
             return;
         }
 
         if (Application.isMobilePlatform)
         {
-            Orbit(target);
+            Orbit(hiddenTarget);
         }
         else
         {
-            OrbitMouse(target);
+            OrbitMouse(hiddenTarget);
         }
 
 
@@ -91,7 +133,7 @@ public class MouseOrbit : MonoBehaviour
             float lastY = y;
             float lastDistance = distance;
 
-            if (Input.GetMouseButton(0))
+            if (!locked && Input.GetMouseButton(0))
             {
                 x += Input.GetAxis("Mouse X") * xSpeed * distance * 0.5f;
                 y -= Input.GetAxis("Mouse Y") * ySpeed * 0.5f;
@@ -136,7 +178,7 @@ public class MouseOrbit : MonoBehaviour
 
             Quaternion rotation = transform.rotation;
 
-            if (Input.touchCount == 1)
+            if (!locked && Input.touchCount == 1)
             {
 
                 xDeltas.Add(Input.GetTouch(0).deltaPosition.x * xSpeed * distance * Time.deltaTime);
@@ -171,11 +213,18 @@ public class MouseOrbit : MonoBehaviour
                 return;
             }
 
-
             transform.rotation = rotation;
             transform.position = position;
 
         }
+    }
+
+    public void FlyTo(Transform target){
+        this.target = target;
+        newTarget = true;
+        distToNewTarget = (target.position - hiddenTarget.position).magnitude;
+       // newPosition = target.position;
+       // lookPosition = transform.forward * distance;
     }
 
     private bool isTooCloseToObject(Vector3 position)
