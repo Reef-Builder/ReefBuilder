@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 /** 
     
@@ -100,18 +101,48 @@ public class SnapToTerrain : MonoBehaviour {
         }
    
         GameObject[] rocks = GameObject.FindGameObjectsWithTag("Rock");
-        
 
         float minDist = float.MaxValue;
 		onTerrain = false;
 
+		List<GameObject> children = new List<GameObject> ();
+
         foreach (GameObject terrain in rocks)
-        {
+		{
 
             if(terrain == gameObject)
             {
                 continue;
             }
+
+			Collider[] childColliders = terrain.GetComponentsInChildren<Collider> ();
+			if (childColliders != null && childColliders.Length != 0) {
+
+				foreach (Collider collider in childColliders) {
+					if (collider.Raycast (ray, out hit, maxDist) && hit.distance < minDist) {
+						minDist = hit.distance;
+
+						Vector3 point = hit.point;
+						Vector3 smoothNormal = SmoothedNormal(hit);
+						//Point now contains the point on the terrain that we want to place our object.  
+						//We should now get the rotation to plce our object with, that is, that normals of the area of the terrain.
+						Quaternion rot = Quaternion.LookRotation(smoothNormal, Vector3.up);
+
+						transform.position = point;
+						transform.rotation = rot;
+						transform.Rotate(initialEulerRotation);
+						transform.RotateAround(transform.position, smoothNormal, rotAroundForward += rotationSpeed * Time.deltaTime);
+						transform.Translate(positionOffset);
+						if (!gameObject.tag.Equals("Rock")) {
+							GetComponent<SpawnPolyps>().normal = smoothNormal;
+						}
+						onTerrain = true;
+					}
+				}
+
+
+				continue;
+			}
 
             if (terrain.GetComponent<MeshCollider>().Raycast(ray, out hit, maxDist) && hit.distance < minDist)
             {
