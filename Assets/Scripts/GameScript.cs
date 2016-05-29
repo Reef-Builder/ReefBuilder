@@ -69,7 +69,7 @@ public class GameScript : MonoBehaviour {
 		}
 	
 	
-		if (coral.Count != 0 && gameCounter % 100 == 0 && fish.Count >0) {
+		if (coral.Count != 0 && gameCounter % 300 == 0 && fish.Count >0) {
 			fishEat ();
 		}
 
