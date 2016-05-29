@@ -20,6 +20,8 @@ public class CoralScript : MonoBehaviour, Placeable {
 	public Transform fishPrefab;
     // Add polyps manually, or auto
     public bool manualCoralCollection;
+	// Can this be placed on sand?
+	public bool sandPlacement = false;
 
 	private GameScript gameScript;
 
@@ -109,8 +111,11 @@ public class CoralScript : MonoBehaviour, Placeable {
 		}
 	}
 
-    public Sprite getIcon()
-    {
+    public Sprite getIcon() {
         return icon;
     }
+
+	public bool canPlaceOnSand() {
+		return sandPlacement;
+	}
 }

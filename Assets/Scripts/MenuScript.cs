@@ -4,6 +4,11 @@ using System.Collections;
 
 public class MenuScript : MonoBehaviour {
 
+	public GameObject coralMenu;
+	public GameObject miscMenu;
+
+	private bool coralMenuVisible = true;
+
 	// Use this for initialization
 	void Start () {
 	
@@ -32,5 +37,17 @@ public class MenuScript : MonoBehaviour {
 
 	public void ExitGame() {
 		Application.Quit();
+	}
+
+	public void SwitchMenuMode(bool mode) {
+		coralMenuVisible = mode;
+
+		if (coralMenuVisible) {
+			coralMenu.SetActive (true);
+			miscMenu.SetActive (false);
+		} else {
+			coralMenu.SetActive (false);
+			miscMenu.SetActive (true);
+		}
 	}
 }
