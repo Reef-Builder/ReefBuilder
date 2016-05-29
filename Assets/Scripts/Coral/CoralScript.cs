@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System;
 
 [System.Serializable]
-public class CoralScript : MonoBehaviour {
+public class CoralScript : MonoBehaviour, Placeable {
 
 	// The UI icon to display for this coral.
 	public Sprite icon;
@@ -97,7 +98,7 @@ public class CoralScript : MonoBehaviour {
 	}
 
 	public void setPlaced(bool place) {
-		print (place);
+		//print (place);
 		//placed = place;
 	}
 
@@ -107,4 +108,9 @@ public class CoralScript : MonoBehaviour {
 			Destroy (gameObject);
 		}
 	}
+
+    public Sprite getIcon()
+    {
+        return icon;
+    }
 }

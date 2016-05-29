@@ -19,13 +19,17 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 	private Image image;
 	private Transform coral;
 	private GameScript gameScript;
-	private CoralScript coralScript;
+	private Placeable coralScript;
 
 	void Start () {
 		gameScript = GameObject.Find ("GameController").GetComponent<GameScript> ();
-		coralScript = prefab.GetComponent<CoralScript> ();
+        if (prefab.tag.Equals("Rock")) {
+            coralScript = prefab.GetComponent<RockScript>();
+        } else {
+            coralScript = prefab.GetComponent<CoralScript>();
+        }
 		image = GetComponent<Image> ();
-		image.sprite = coralScript.icon;
+		image.sprite = coralScript.getIcon();
 		costText.text = "" + coralScript.getCost();
 	}
 
@@ -74,7 +78,9 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 			gameScript.removePolyps (coralScript.getCost());
 			coralScript.setPlaced (true);
 
-			gameScript.addCoral (coral.GetComponent<CoralScript> ());
+            if (!coral.tag.Equals("Rock")) {
+                gameScript.addCoral(coral.GetComponent<CoralScript>());
+            }
 		} else {
 			Destroy (coral.gameObject);
 		}
