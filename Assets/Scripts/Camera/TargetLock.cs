@@ -32,7 +32,7 @@ public class TargetLock : MonoBehaviour {
             foreach(RaycastHit hit in rays)
             {
 
-                if (hit.distance < minDist)
+                if (hit.transform.gameObject.GetComponent<CoralScript>() == null && hit.distance < minDist)
                 {
                     minDist = hit.distance;
                     closest = hit.transform;
