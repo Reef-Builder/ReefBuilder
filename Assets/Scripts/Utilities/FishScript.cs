@@ -69,7 +69,7 @@ public class FishScript : MonoBehaviour {
 				yRot = -yRot;
 			}
 
-			transform.Translate (0, Random.Range (1, 15), 0);
+			//transform.Translate (0, Random.Range (1, 15), 0);
 		}
 		//Debug.Log ("mode : " +mode);
 			
