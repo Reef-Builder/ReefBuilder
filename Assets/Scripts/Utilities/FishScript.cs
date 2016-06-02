@@ -38,7 +38,7 @@ public class FishScript : MonoBehaviour {
             yRot = -yRot;
         }
 
-        transform.Translate(0, Random.Range(1, 15), 0);
+        transform.Translate(0, Random.Range(3, 15), 0);
 
 	}
 	
@@ -116,7 +116,7 @@ public class FishScript : MonoBehaviour {
 
 		//transform.position = Vector3.MoveTowards (transform.position, dir, step);
 		transform.rotation = Quaternion.LookRotation (rot);
-		transform.Translate(0, 0, speed * Time.deltaTime);
+		transform.Translate(0, 0, step);
 
 		//Debug.Log ("move away");
 		//Debug.DrawRay (transform.position, dir, Color.green, 5, true);
