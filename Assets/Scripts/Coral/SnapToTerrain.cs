@@ -57,6 +57,13 @@ public class SnapToTerrain : MonoBehaviour {
             return;
         }
 
+		//SnapToTerrain[] snaps = transform.GetComponentsInChildren<SnapToTerrain> ();
+		//foreach (SnapToTerrain snap in snaps) {
+
+		//	snap.terrain = terrain;
+
+		//}
+
         //Store the mouse/touch position in screenPos
         Vector2 screenPos = Vector2.zero;
         if (!locked)
@@ -90,7 +97,11 @@ public class SnapToTerrain : MonoBehaviour {
             screenPos += mobileDragOffset;
         }
 
-        Ray ray = Camera.main.ScreenPointToRay(screenPos);
+
+		Vector3 offset = Camera.main.WorldToScreenPoint (positionOffset);
+		//screenPos += new Vector2 (offset.x, offset.y);
+
+		Ray ray = Camera.main.ScreenPointToRay (screenPos);
 
         GameObject[] sand = null;
 
@@ -199,6 +210,7 @@ public class SnapToTerrain : MonoBehaviour {
         {
             Vector3 point = ray.GetPoint(defaultDist);
             transform.position = point;
+			transform.Translate (positionOffset);
         }
 
         //Debug.Log("Can place here: " + CanPlace());
@@ -248,6 +260,17 @@ public class SnapToTerrain : MonoBehaviour {
     */
     public bool SetLocked(bool locked)
     {
+
+
+		SnapToTerrain[] snaps = transform.GetComponentsInChildren<SnapToTerrain> ();
+	
+		if (snaps.Length != 0) {
+			foreach (SnapToTerrain snap in snaps) {
+				if (snap != this) {
+					snap.SetLocked (locked);
+				}
+			}
+		}
 
         if (locked)
         {
