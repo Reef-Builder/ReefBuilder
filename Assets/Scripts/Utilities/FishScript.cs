@@ -40,6 +40,8 @@ public class FishScript : MonoBehaviour {
 
         transform.Translate(0, Random.Range(3, 15), 0);
 
+        eatingDis = calculateEatingDistance();
+
 	}
 	
 	// Update is called once per frame
@@ -187,7 +189,10 @@ public class FishScript : MonoBehaviour {
 	
 	}
 
-
+    private float calculateEatingDistance() {
+        float dist = GetComponent<Collider>().bounds.size.z;
+        return dist;
+    }
 
 
 }
