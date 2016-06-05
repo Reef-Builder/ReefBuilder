@@ -43,14 +43,26 @@ public class SnapToTerrain : MonoBehaviour {
 	private float rotationSpeed = 50f;
 	private float rotAroundForward = 0f;
 
+	private Vector3 prevScale;
 
     // Use this for initialization
     void Start () {
-	
+		prevScale = transform.localScale;
 	}
 	
 	// Update is called once per frame
 	void Update () {
+
+		if (!transform.localScale.Equals (prevScale)) {
+			transform.Translate (-positionOffset);
+			Vector3 diff = (transform.localScale - prevScale);
+			float mag = diff.magnitude;
+			float newMag = transform.localScale.magnitude;
+			float oldMag = prevScale.magnitude;
+			positionOffset.Scale (new Vector3(newMag/oldMag, newMag/oldMag, newMag/oldMag));
+			transform.Translate (positionOffset);
+			prevScale = transform.localScale;
+		}
 
         if (locked)
         {
