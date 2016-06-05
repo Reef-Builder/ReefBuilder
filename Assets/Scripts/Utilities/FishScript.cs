@@ -190,8 +190,16 @@ public class FishScript : MonoBehaviour {
 	}
 
     private float calculateEatingDistance() {
+        if(GetComponent<Collider>() == null) {
+            return 2;
+        }
         float dist = GetComponent<Collider>().bounds.size.z;
         return dist;
+    }
+
+    public bool isEating()
+    {
+        return mode == EATMODE;
     }
 
 
