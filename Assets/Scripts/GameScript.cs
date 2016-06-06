@@ -8,10 +8,9 @@ using System.Collections.Generic;
  * This script handles the main game objects, including the players currency and
  * the tracking of time.
  */
-[System.Serializable]
 public class GameScript : MonoBehaviour {
 
-	public static GameScript current;
+	public static GameScript current = GameObject.FindObjectOfType<GameScript> ();
 
 	// This is the text to update with the players currency amount.
 	public Text polypText;
@@ -46,7 +45,7 @@ public class GameScript : MonoBehaviour {
 //	private HashSet<FishScript> eatingFish = new HashSet<FishScript> ();
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		polypText.text = "" + polyps;
 		fossilText.text = "" + fossils;
 
@@ -155,4 +154,42 @@ public class GameScript : MonoBehaviour {
 		}
 	}
 
+	public GameData Serialize() {
+		GameData data = new GameData ();
+
+		data.polyps = polyps;
+		data.fossils = fossils;
+		data.gameCounter = gameCounter;
+		data.lastTime = lastTime;
+
+		return data;
+	}
+
+	public void Deserialize(GameData data) {
+		polyps = data.polyps;
+		polypText.text = "" + polyps;
+
+		fossils = data.fossils;
+		fossilText.text = "" + fossils;
+
+		gameCounter = data.gameCounter;
+		lastTime = data.lastTime;
+	}
+}
+
+/**
+ * This represents a serialized version of the game, saving variables
+ * to a separate and serializable-friendly class.
+ */
+[System.Serializable]
+public class GameData {
+	public int polyps;
+	public int fossils;
+	public int gameCounter;
+	public DateTime lastTime;
+
+	public override string ToString() {
+		return "[GameData] polyps: " + polyps + ", fossils: " + fossils + ", gameCounter: "
+		+ gameCounter + " + lastTime: " + lastTime;
+	}
 }
