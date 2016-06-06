@@ -122,24 +122,50 @@ public class CoralScript : MonoBehaviour, Placeable {
 	public CoralData Serialize() {
 		CoralData data = new CoralData ();
 
-		data.localPosition = transform.localPosition;
-		data.localScale = transform.localScale;
-		data.localEulerAngles = transform.localEulerAngles;
+		data.prefab = transform.name.Replace ("(Clone)", "");
+
+		data.localPositionX = transform.localPosition.x;
+		data.localPositionY = transform.localPosition.y;
+		data.localPositionZ = transform.localPosition.z;
+
+		data.localScaleX = transform.localScale.x;
+		data.localScaleY = transform.localScale.y;
+		data.localScaleZ = transform.localScale.z;
+
+		data.localEulerAnglesX = transform.localEulerAngles.x;
+		data.localEulerAnglesY = transform.localEulerAngles.y;
+		data.localEulerAnglesZ = transform.localEulerAngles.z;
 
 		return data;
 	}
 
-	public void Deserialize(CoralData data) {
-		transform.localPosition = data.localPosition;
-		transform.localScale = data.localScale;
-		transform.localEulerAngles = data.localEulerAngles;
+	public static CoralScript Deserialize(CoralData data) {
+		GameObject obj = GameObject.Find (data.prefab);
+
+		GameObject coral = (GameObject)Instantiate (obj, Vector3.zero, Quaternion.identity);
+
+		coral.transform.localPosition = new Vector3(data.localPositionX, data.localPositionY, data.localPositionZ);
+		coral.transform.localScale = new Vector3(data.localScaleX, data.localScaleY, data.localScaleZ);
+		coral.transform.localEulerAngles = new Vector3(data.localEulerAnglesX, data.localEulerAnglesY, data.localEulerAnglesZ);
+
+		return coral.GetComponent<CoralScript> ();
 	}
 }
 
 
 [System.Serializable]
 public class CoralData {
-	public Vector3 localPosition;
-	public Vector3 localScale;
-	public Vector3 localEulerAngles;
+	public String prefab;
+
+	public float localPositionX;
+	public float localPositionY;
+	public float localPositionZ;
+
+	public float localScaleX;
+	public float localScaleY;
+	public float localScaleZ;
+
+	public float localEulerAnglesX;
+	public float localEulerAnglesY;
+	public float localEulerAnglesZ;
 }

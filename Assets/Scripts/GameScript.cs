@@ -184,12 +184,8 @@ public class GameScript : MonoBehaviour {
 		lastTime = data.lastTime;
 
 		foreach (CoralData c in data.coral) {
-			CoralScript deserialized = new CoralScript ();
-			deserialized.Deserialize (c);
-			coral.Add (deserialized);
+			coral.Add (CoralScript.Deserialize(c));
 		}
-
-		//print coral;
 	}
 }
 
