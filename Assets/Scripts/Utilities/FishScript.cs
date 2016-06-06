@@ -38,7 +38,9 @@ public class FishScript : MonoBehaviour {
             yRot = -yRot;
         }
 
-        transform.Translate(0, Random.Range(1, 15), 0);
+        transform.Translate(0, Random.Range(3, 15), 0);
+
+        eatingDis = calculateEatingDistance();
 
 	}
 	
@@ -69,7 +71,7 @@ public class FishScript : MonoBehaviour {
 				yRot = -yRot;
 			}
 
-			transform.Translate (0, Random.Range (1, 15), 0);
+			//transform.Translate (0, Random.Range (1, 15), 0);
 		}
 		//Debug.Log ("mode : " +mode);
 			
@@ -116,7 +118,7 @@ public class FishScript : MonoBehaviour {
 
 		//transform.position = Vector3.MoveTowards (transform.position, dir, step);
 		transform.rotation = Quaternion.LookRotation (rot);
-		transform.Translate(0, 0, speed * Time.deltaTime);
+		transform.Translate(0, 0, step);
 
 		//Debug.Log ("move away");
 		//Debug.DrawRay (transform.position, dir, Color.green, 5, true);
@@ -187,7 +189,18 @@ public class FishScript : MonoBehaviour {
 	
 	}
 
+    private float calculateEatingDistance() {
+        if(GetComponent<Collider>() == null) {
+            return 2;
+        }
+        float dist = GetComponent<Collider>().bounds.size.z;
+        return dist;
+    }
 
+    public bool isEating()
+    {
+        return mode == EATMODE;
+    }
 
 
 }

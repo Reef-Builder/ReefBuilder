@@ -69,16 +69,19 @@ public class GameScript : MonoBehaviour {
 		}
 	
 	
-		if (coral.Count != 0 && gameCounter % 100 == 0 && fish.Count >0) {
+		if (coral.Count != 0 && gameCounter % 20 == 0 && fish.Count >0) {
 			fishEat ();
 		}
 
-		if (gameCounter % 500 == 0 && eatingFish.Count > 0) {
+		if (gameCounter % 20 == 0 && eatingFish.Count > 0) {
 			int i = UnityEngine.Random.Range(0,eatingFish.Count);
 			FishScript f = eatingFish [i];
-			eatingFish.Remove (f);
-			f.randFish ();
-		
+            if (f.isEating())
+            {
+                eatingFish.Remove(f);
+                f.randFish();
+            }
+		    
 		}
 
 		if (Input.GetKeyDown (KeyCode.Space)) {

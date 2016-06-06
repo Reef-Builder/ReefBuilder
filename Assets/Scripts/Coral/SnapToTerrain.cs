@@ -43,19 +43,38 @@ public class SnapToTerrain : MonoBehaviour {
 	private float rotationSpeed = 50f;
 	private float rotAroundForward = 0f;
 
+	private Vector3 prevScale;
 
     // Use this for initialization
     void Start () {
-	
+		prevScale = transform.localScale;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
+		if (!transform.localScale.Equals (prevScale)) {
+			transform.Translate (-positionOffset);
+			Vector3 diff = (transform.localScale - prevScale);
+			float mag = diff.magnitude;
+			float newMag = transform.localScale.magnitude;
+			float oldMag = prevScale.magnitude;
+			positionOffset.Scale (new Vector3(newMag/oldMag, newMag/oldMag, newMag/oldMag));
+			transform.Translate (positionOffset);
+			prevScale = transform.localScale;
+		}
+
         if (locked)
         {
             return;
         }
+
+		//SnapToTerrain[] snaps = transform.GetComponentsInChildren<SnapToTerrain> ();
+		//foreach (SnapToTerrain snap in snaps) {
+
+		//	snap.terrain = terrain;
+
+		//}
 
         //Store the mouse/touch position in screenPos
         Vector2 screenPos = Vector2.zero;
@@ -90,7 +109,11 @@ public class SnapToTerrain : MonoBehaviour {
             screenPos += mobileDragOffset;
         }
 
-        Ray ray = Camera.main.ScreenPointToRay(screenPos);
+
+		Vector3 offset = Camera.main.WorldToScreenPoint (positionOffset);
+		//screenPos += new Vector2 (offset.x, offset.y);
+
+		Ray ray = Camera.main.ScreenPointToRay (screenPos);
 
         GameObject[] sand = null;
 
@@ -199,6 +222,7 @@ public class SnapToTerrain : MonoBehaviour {
         {
             Vector3 point = ray.GetPoint(defaultDist);
             transform.position = point;
+			transform.Translate (positionOffset);
         }
 
         //Debug.Log("Can place here: " + CanPlace());
@@ -248,6 +272,17 @@ public class SnapToTerrain : MonoBehaviour {
     */
     public bool SetLocked(bool locked)
     {
+
+
+		SnapToTerrain[] snaps = transform.GetComponentsInChildren<SnapToTerrain> ();
+	
+		if (snaps.Length != 0) {
+			foreach (SnapToTerrain snap in snaps) {
+				if (snap != this) {
+					snap.SetLocked (locked);
+				}
+			}
+		}
 
         if (locked)
         {
