@@ -34,4 +34,20 @@ public class RockScript : MonoBehaviour, Placeable {
 	public bool canPlaceOnSand() {
 		return true;
 	}
+
+	public RockData Serialize() {
+		RockData data = new RockData ();
+
+		return data;
+	}
+
+	public void Deserialize(RockData data) {
+		
+	}
+}
+
+
+[System.Serializable]
+public class RockData {
+
 }

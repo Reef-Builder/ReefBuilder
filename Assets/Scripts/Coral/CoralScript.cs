@@ -118,4 +118,28 @@ public class CoralScript : MonoBehaviour, Placeable {
 	public bool canPlaceOnSand() {
 		return sandPlacement;
 	}
+
+	public CoralData Serialize() {
+		CoralData data = new CoralData ();
+
+		data.localPosition = transform.localPosition;
+		data.localScale = transform.localScale;
+		data.localEulerAngles = transform.localEulerAngles;
+
+		return data;
+	}
+
+	public void Deserialize(CoralData data) {
+		transform.localPosition = data.localPosition;
+		transform.localScale = data.localScale;
+		transform.localEulerAngles = data.localEulerAngles;
+	}
+}
+
+
+[System.Serializable]
+public class CoralData {
+	public Vector3 localPosition;
+	public Vector3 localScale;
+	public Vector3 localEulerAngles;
 }

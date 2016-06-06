@@ -162,6 +162,14 @@ public class GameScript : MonoBehaviour {
 		data.gameCounter = gameCounter;
 		data.lastTime = lastTime;
 
+		List<CoralData> coral = new List<CoralData> ();
+
+		foreach(CoralScript c in this.coral) {
+			coral.Add (c.Serialize());
+		}
+
+		data.coral = coral;
+
 		return data;
 	}
 
@@ -174,6 +182,14 @@ public class GameScript : MonoBehaviour {
 
 		gameCounter = data.gameCounter;
 		lastTime = data.lastTime;
+
+		foreach (CoralData c in data.coral) {
+			CoralScript deserialized = new CoralScript ();
+			deserialized.Deserialize (c);
+			coral.Add (deserialized);
+		}
+
+		//print coral;
 	}
 }
 
@@ -187,6 +203,10 @@ public class GameData {
 	public int fossils;
 	public int gameCounter;
 	public DateTime lastTime;
+
+	public List<FishData> fish;
+	public List<CoralData> coral;
+	public List<RockData> terrain;
 
 	public override string ToString() {
 		return "[GameData] polyps: " + polyps + ", fossils: " + fossils + ", gameCounter: "
