@@ -301,6 +301,10 @@ public class SnapToTerrain : MonoBehaviour {
         return true;
     }
 
+	public bool isLocked(){
+		return locked;
+	}
+
     /**
 
         Checks whether the object could be placed where it currently sits; whether or not
