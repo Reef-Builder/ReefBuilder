@@ -10,7 +10,7 @@ using System.Collections.Generic;
  */
 [System.Serializable]
 public class GameScript : MonoBehaviour {
-
+	
 	public static GameScript current;
 
 	// This is the text to update with the players currency amount.
@@ -58,7 +58,7 @@ public class GameScript : MonoBehaviour {
 	}
 
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 		currentTime = DateTime.Now;
 
 		TimeSpan diffTime = currentTime.Subtract (lastTime);
