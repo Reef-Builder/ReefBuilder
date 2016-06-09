@@ -9,14 +9,15 @@ public class FishScript : MonoBehaviour {
     public float maxSpeed = 10;
 
     private float xRot = -0.01f;
-    public float yRot = 2f;
+	//private float xRot = 0f;
+	public float yRot = 2f;
     private float zRot = 0f;
-
-    private bool upSpeed = true;
+	private float upYRot = -90f;
+   
 
     public bool positiveZ = false;
     public Vector3 initialMove = new Vector3(0, 0, 0);
-
+	public Transform spawnPoint;
 	private Transform coral;
 	private Vector3 target;
 
@@ -24,56 +25,76 @@ public class FishScript : MonoBehaviour {
 	const int MOVETOMODE = 2;
 	const int EATMODE = 3;
 	const int MOVEAWAYMODE = 5;
+	const int MOVEUPMODE = 6;
 	int mode = RANDMODE;
 	float eatingDis = 2;
 	const float disFormRock = 10;
 	// Use this for initialization
 	void Start () {
-        transform.Translate(initialMove);
+
+		//sqawns the fish behide the carmea 
+		Transform carmera = GameObject.Find ("Main Camera").transform;
+		Vector3 pos = carmera.transform.position-carmera.forward*5;
+		transform.position = pos;
+		transform.Translate(initialMove);
         speed = Random.Range(minSpeed, maxSpeed);
 
-        if(Random.Range(0, 3) == 2)
+
+
+
+
+
+		if(Random.Range(0, 3) == 2)
         {
             transform.Rotate(new Vector3(0, 180, 0));
             yRot = -yRot;
         }
 
-        transform.Translate(0, Random.Range(1, 15), 0);
+        transform.Translate(0, Random.Range(5, 15), 0);
 
+		if (UnityEngine.Random.Range (0f, 1) < .4) {
+			transform.localScale = transform.localScale * UnityEngine.Random.Range (0.5f, 1.5f);
+		} else {
+			transform.localScale = transform.localScale * UnityEngine.Random.Range (0.8f, 1.2f);
+		
+		}
+		upYRot = UnityEngine.Random.Range(-85,-95);
+		
+		
 	}
 	
 	// Update is called once per frame
-	void FixedUpdate () {
-		if (mode == RANDMODE) {
-			randMove ();
-		} 
+	void Update () {
 
-		if (mode == MOVETOMODE) {
-			moveTo ();
-			
-		}
+	
+
+
 		if (mode ==MOVETOMODE &&Vector3.Distance (transform.position, target)<=eatingDis) {
 			mode = EATMODE;
 		}
-    
+    	
+		if(mode == MOVEAWAYMODE && Vector3.Distance (Vector3.zero, transform.position) > disFormRock) {
+			mode = RANDMODE;
+		}
+
+
+		if (mode == RANDMODE) {
+			randMove ();
+			return;
+		} 
+		if (mode == MOVETOMODE) {
+			moveTo ();
+			return;
+		}
 		if (mode == MOVEAWAYMODE) {
 			moveAway ();
-		
+			return;
 		}
 
-		if (mode == MOVEAWAYMODE && Vector3.Distance (Vector3.zero, transform.position) > disFormRock) {
-			mode = RANDMODE;
-			
-			if (Random.Range (0, 3) == 2) {
-				transform.Rotate (new Vector3 (0, 180, 0));
-				yRot = -yRot;
-			}
-
-			transform.Translate (0, Random.Range (1, 15), 0);
-		}
 		//Debug.Log ("mode : " +mode);
-			
+
 	}
+
 
 	public void randMove(){
 		float runtime = Time.time;
@@ -81,25 +102,24 @@ public class FishScript : MonoBehaviour {
 		float currYRot = (Mathf.Sin(runtime)+2f)*yRot;
 
 		//upSpeed = (Random.Range(0, 10) > 7);
+		float cXRot = xRot;
 
-		if (upSpeed)
-		{
-			//speed += speed * 0.1f;
-		} else
-		{
-			// speed -= speed * 0.2f;
+
+
+
+		if (transform.position.y < 5) {
+			cXRot = upYRot;
 		}
 
-		if (positiveZ)
-		{
+
+		if (positiveZ){
 			speed = -speed;
 		}
 
 		transform.Translate(0, 0, -speed * Time.deltaTime);
-		transform.Rotate(new Vector3(xRot, currYRot, zRot) * Time.deltaTime);
+		transform.Rotate(new Vector3(cXRot, currYRot, zRot) * Time.deltaTime);
 
-		if (positiveZ)
-		{
+		if (positiveZ){
 			speed = -speed;
 		}
 
@@ -116,7 +136,13 @@ public class FishScript : MonoBehaviour {
 
 		//transform.position = Vector3.MoveTowards (transform.position, dir, step);
 		transform.rotation = Quaternion.LookRotation (rot);
+
+
 		transform.Translate(0, 0, speed * Time.deltaTime);
+
+		if (transform.position.y == 10) {
+			mode = RANDMODE;
+		}
 
 		//Debug.Log ("move away");
 		//Debug.DrawRay (transform.position, dir, Color.green, 5, true);

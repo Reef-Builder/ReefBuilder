@@ -41,7 +41,7 @@ public class GameScript : MonoBehaviour {
 
 	private List<CoralScript> coral = new List<CoralScript> ();
 	private List<FishScript> fish = new List<FishScript> ();
-	private List<FishScript> eatingFish =new List<FishScript> ();
+	private Queue<FishScript> eatingFish =new Queue<FishScript> ();
 
 //	private HashSet<FishScript> eatingFish = new HashSet<FishScript> ();
 
@@ -69,14 +69,12 @@ public class GameScript : MonoBehaviour {
 		}
 	
 	
-		if (coral.Count != 0 && gameCounter % 300 == 0 && fish.Count >0) {
+		if (coral.Count != 0 && fish.Count >0 && (UnityEngine.Random.Range(0,100)==0) ) {
 			fishEat ();
 		}
 
 		if (gameCounter % 500 == 0 && eatingFish.Count > 0) {
-			int i = UnityEngine.Random.Range(0,eatingFish.Count);
-			FishScript f = eatingFish [i];
-			eatingFish.Remove (f);
+			FishScript f=eatingFish.Dequeue();
 			f.randFish ();
 		
 		}
@@ -84,6 +82,11 @@ public class GameScript : MonoBehaviour {
 		if (Input.GetKeyDown (KeyCode.Space)) {
 			addFossils (5);
 		}
+
+		if (gameCounter % 1500 == 0) {
+			addFossils (1);
+		}
+
 	}
 
 	public void addPolyps(int count) {
@@ -147,7 +150,7 @@ public class GameScript : MonoBehaviour {
 		int c =(int) UnityEngine.Random.Range(0, coral.Count);
 		Transform target = coral [c].gameObject.transform;
 		if (!eatingFish.Contains (fis) && fis != null) {
-			eatingFish.Add (fis);
+			eatingFish.Enqueue (fis);
 			fis.setTarget (target);
 		}
 	}
