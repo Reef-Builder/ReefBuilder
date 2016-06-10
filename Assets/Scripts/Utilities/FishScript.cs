@@ -17,7 +17,7 @@ public class FishScript : MonoBehaviour {
 
     public bool positiveZ = false;
     public Vector3 initialMove = new Vector3(0, 0, 0);
-	public Transform spawnPoint;
+
 	private Transform coral;
 	private Vector3 target;
 
@@ -107,7 +107,7 @@ public class FishScript : MonoBehaviour {
 
 
 
-		if (transform.position.y < 5) {
+		if (transform.position.y < 1) {
 			cXRot = upYRot;
 		}
 
@@ -116,7 +116,7 @@ public class FishScript : MonoBehaviour {
 			speed = -speed;
 		}
 
-		transform.Translate(0, 0, -speed * Time.deltaTime);
+		transform.Translate(0, 0, speed * Time.deltaTime);
 		transform.Rotate(new Vector3(cXRot, currYRot, zRot) * Time.deltaTime);
 
 		if (positiveZ){
@@ -126,22 +126,26 @@ public class FishScript : MonoBehaviour {
 
 	}
 	public void moveAway(){
-
+		
+		//transform.position = Vector3.MoveTowards (transform.position, dir, step);
 		Vector3 angle = - (target-transform.position);
-		Vector3 dir = new Vector3 (0,0,angle.z);
+		Vector3 dir;
+		if (angle.y < 10) {
+			dir = new Vector3 (0, 0, angle.z);
+		} else {
+			dir = new Vector3 (0, 0, angle.z);
+		}
 		float step = speed * Time.deltaTime;
 
 
 		Vector3 rot = Vector3.RotateTowards (transform.forward, dir*10, step, 10f);
-
-		//transform.position = Vector3.MoveTowards (transform.position, dir, step);
 		transform.rotation = Quaternion.LookRotation (rot);
 
-
-		transform.Translate(0, 0, speed * Time.deltaTime);
+		transform.Translate(0, 0,step);
 
 		if (transform.position.y == 10) {
 			mode = RANDMODE;
+			Debug.Log ("enter Randmode");
 		}
 
 		//Debug.Log ("move away");
@@ -210,6 +214,10 @@ public class FishScript : MonoBehaviour {
 
 	public void randFish(){
 		mode = MOVEAWAYMODE;
+
+	
+
+
 	
 	}
 
