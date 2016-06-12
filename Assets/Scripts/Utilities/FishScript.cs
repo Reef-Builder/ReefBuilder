@@ -37,9 +37,18 @@ public class FishScript : MonoBehaviour {
             yRot = -yRot;
         }
 
+
+		if (UnityEngine.Random.Range (0f, 1) < .4) {
+			transform.localScale = transform.localScale * UnityEngine.Random.Range (0.5f, 1.5f);
+		} else {
+			transform.localScale = transform.localScale * UnityEngine.Random.Range (0.8f, 1.2f);
+
+		}
+
+
         transform.Translate(0, Random.Range(3, 15), 0);
 
-        eatingDis = calculateEatingDistance();
+		eatingDis = 2;//calculateEatingDistance();
 
 	}
 	
@@ -145,7 +154,7 @@ public class FishScript : MonoBehaviour {
 
 	
 
-		if (hit.collider.gameObject.transform.position==target) {
+		if (hit.collider.gameObject ==coral.gameObject) {
 			//Debug.Log ("ray cast hit : "+hit.collider.gameObject);
 
 			//upSpeed = (Random.Range(0, 10) > 7);
