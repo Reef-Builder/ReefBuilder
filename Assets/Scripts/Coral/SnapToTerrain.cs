@@ -182,7 +182,7 @@ public class SnapToTerrain : MonoBehaviour {
         {
             foreach (GameObject terrain in sand)
             {
-                if (terrain.GetComponent<TerrainCollider>().Raycast(ray, out hit, maxDist) && hit.distance < minDist)
+                if (terrain.GetComponent<MeshCollider>().Raycast(ray, out hit, maxDist) && hit.distance < minDist)
                 {
 
                     minDist = hit.distance;

@@ -10,6 +10,7 @@
 		_CausticsShallowFadeDistance("Caustics Shallow Distance", Float) = 1.0
 		_CausticsScale("Caustics Scale", Float) = 1.0
 		_CausticsDrift("Caustics Drift", Vector) = (0.1, 0.0, -0.4)
+		//_Health("Health", Float) = 1.0 
 
     }
     SubShader
@@ -94,6 +95,8 @@
 					// Calculate caustics light emission
 					float3 toAdd = Emission(causticsTextureCoord) * fadeFactor * belowFactor;
 					col = float4(toAdd.r, toAdd.g, toAdd.b, 1);
+
+					//col += float4(1.0, 1.0, 1.0, 1.0)*(1.0-_Health);
 				}
 
                 return col;
