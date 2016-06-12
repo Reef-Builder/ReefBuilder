@@ -1,6 +1,7 @@
 // Implements Edge Detection using a Roberts cross filter.
 
 using UnityEngine;
+using UnityStandardAssets.ImageEffects;
 
 [ExecuteInEditMode]
 [AddComponentMenu("Image Effects/Edge Detection (Color)")]

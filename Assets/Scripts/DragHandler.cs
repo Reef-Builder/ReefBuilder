@@ -85,6 +85,7 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 			placeableScript.setPlaced (true);
 
 			if (placedObject.tag.Equals ("Rock")) {
+				gameScript.addObject (placedObject.GetComponent<RockScript> ());
 				gameScript.removeFossils (placeableScript.getCost ());
 			} else {
 				gameScript.addCoral (placedObject.GetComponent<CoralScript> ());

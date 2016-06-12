@@ -20,7 +20,7 @@ public class TargetLock : MonoBehaviour {
             init = true;
         }
 
-        if (init && !Input.GetMouseButton(0) && (Input.mousePosition - touchPos).magnitude < 10)
+        if (init && Input.GetMouseButtonDown(0) && (Input.mousePosition - touchPos).magnitude < 10)
         {
 
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -31,20 +31,27 @@ public class TargetLock : MonoBehaviour {
 
             foreach(RaycastHit hit in rays)
             {
-                //If it's the right kind of object..
-                if (hit.transform.GetComponent<CameraCanSnapTo>() != null)
+
+                if (hit.transform.gameObject.GetComponent<CoralScript>() == null && hit.distance < minDist)
                 {
-                   if(hit.distance < minDist)
-                    {
-                        minDist = hit.distance;
-                        closest = hit.transform;
-                    }
+                    minDist = hit.distance;
+                    closest = hit.transform;
                 }
+
+        
             }
             if (closest != null && closest != Camera.main.GetComponent<MouseOrbit>().target)
             {
-                Camera.main.GetComponent<MouseOrbit>().target = closest;
-                Camera.main.GetComponent<MouseOrbit>().distance = 15;
+
+                if(closest.GetComponent<CameraCanSnapTo>() == null)
+                {
+                    return;
+                }
+
+                MouseOrbit orbit = Camera.main.GetComponent<MouseOrbit>();
+                orbit.FlyTo(closest);
+
+               // Camera.main.GetComponent<MouseOrbit>().distance = 15;
             }
 
         }

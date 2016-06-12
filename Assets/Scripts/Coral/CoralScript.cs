@@ -23,6 +23,8 @@ public class CoralScript : MonoBehaviour, Placeable {
 	// Can this be placed on sand?
 	public bool sandPlacement = false;
 
+	public Vector3 positionOffset = new Vector3(0, 0, 0);
+
 	private GameScript gameScript;
 
 	// The instantiated fish itself.
@@ -57,13 +59,6 @@ public class CoralScript : MonoBehaviour, Placeable {
 	
 	// Update is called once per frame
 	void Update () {
-		/*print (placed);
-		if (!placed) {
-			return;
-		}*/
-
-		//print ("test");
-
 		int gameCounter = gameScript.getGameCounter ();
 
 		if(!fishSpawned && ((gameCounter - fishCounter) >= fishRate)) {
@@ -80,11 +75,25 @@ public class CoralScript : MonoBehaviour, Placeable {
             }	
 		}
 
+		// Check if the coral still has any room to grow. If it does, time to grow!
 		if ((relativeSize < maxScale) && (gameCounter - growCounter) >= growRate) {
 			growCounter = gameCounter;
 
+			// Increase the coral size, keeping track of the relative size.
+			// This prevents the coral from growing past a certain point.
+			Vector3 prevScale = transform.localScale;
 			transform.localScale = originalScale * relativeSize;
 			relativeSize = relativeSize + growIncrement;
+
+			// Move the coral up slightly, this adjusts for coral models which appear to grow 
+			// into the object they sit on
+			transform.Translate (-positionOffset);
+			Vector3 diff = (transform.localScale - prevScale);
+			float mag = diff.magnitude;
+			float newMag = transform.localScale.magnitude;
+			float oldMag = prevScale.magnitude;
+			positionOffset.Scale (new Vector3(newMag/oldMag, newMag/oldMag, newMag/oldMag));
+			transform.Translate (positionOffset);
 		}
 	}
 
@@ -118,4 +127,72 @@ public class CoralScript : MonoBehaviour, Placeable {
 	public bool canPlaceOnSand() {
 		return sandPlacement;
 	}
+
+	public CoralData Serialize() {
+		CoralData data = new CoralData ();
+
+		data.prefab = transform.name.Replace ("(Clone)", "");
+
+		data.relativeSize = relativeSize;
+
+		data.localPositionX = transform.localPosition.x;
+		data.localPositionY = transform.localPosition.y;
+		data.localPositionZ = transform.localPosition.z;
+
+		data.localScaleX = transform.localScale.x;
+		data.localScaleY = transform.localScale.y;
+		data.localScaleZ = transform.localScale.z;
+
+		data.localEulerAnglesX = transform.localEulerAngles.x;
+		data.localEulerAnglesY = transform.localEulerAngles.y;
+		data.localEulerAnglesZ = transform.localEulerAngles.z;
+
+		data.originalScaleX = originalScale.x;
+		data.originalScaleY = originalScale.y;
+		data.originalScaleZ = originalScale.z;
+
+		return data;
+	}
+
+	public static CoralScript Deserialize(CoralData data) {
+		GameObject coral = (GameObject)Instantiate (Resources.Load("Prefabs/GameObjects/" + data.prefab));
+
+		SnapToTerrain snapScript = coral.GetComponent<SnapToTerrain> ();
+		snapScript.HardLock (true);
+
+		coral.transform.localPosition = new Vector3(data.localPositionX, data.localPositionY, data.localPositionZ);
+		coral.transform.localScale = new Vector3(data.localScaleX, data.localScaleY, data.localScaleZ);
+		coral.transform.localEulerAngles = new Vector3(data.localEulerAnglesX, data.localEulerAnglesY, data.localEulerAnglesZ);
+
+		CoralScript coralScript = coral.GetComponent<CoralScript> ();
+
+		coralScript.relativeSize = data.relativeSize;
+		coralScript.originalScale = new Vector3 (data.originalScaleX, data.originalScaleY, data.originalScaleZ);
+
+		return coralScript;
+	}
+}
+
+
+[System.Serializable]
+public class CoralData {
+	public String prefab;
+
+	public float relativeSize;
+
+	public float localPositionX;
+	public float localPositionY;
+	public float localPositionZ;
+
+	public float localScaleX;
+	public float localScaleY;
+	public float localScaleZ;
+
+	public float localEulerAnglesX;
+	public float localEulerAnglesY;
+	public float localEulerAnglesZ;
+
+	public float originalScaleX;
+	public float originalScaleY;
+	public float originalScaleZ;
 }

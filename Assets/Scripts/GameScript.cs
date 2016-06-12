@@ -8,10 +8,9 @@ using System.Collections.Generic;
  * This script handles the main game objects, including the players currency and
  * the tracking of time.
  */
-[System.Serializable]
 public class GameScript : MonoBehaviour {
 
-	public static GameScript current;
+	public static GameScript current = GameObject.FindObjectOfType<GameScript> ();
 
 	// This is the text to update with the players currency amount.
 	public Text polypText;
@@ -36,17 +35,22 @@ public class GameScript : MonoBehaviour {
 	// when gameCounter reaches X. The gameCounter can also be tracked separately,
 	// for example to trigger Y when gameCounter increases by X.
 	private int gameCounter = 0;
+	private int saveCounter = 0;
+
+	private int saveRate = 100;
 
 	private bool deleteMode = false;
 
 	private List<CoralScript> coral = new List<CoralScript> ();
+	private List<RockScript> objects = new List<RockScript> ();
+
 	private List<FishScript> fish = new List<FishScript> ();
 	private List<FishScript> eatingFish =new List<FishScript> ();
 
 //	private HashSet<FishScript> eatingFish = new HashSet<FishScript> ();
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		polypText.text = "" + polyps;
 		fossilText.text = "" + fossils;
 
@@ -68,17 +72,30 @@ public class GameScript : MonoBehaviour {
 			lastTime = currentTime;
 		}
 	
+		if((gameCounter - saveCounter) >= saveRate) {
+			saveCounter = gameCounter;
+			GameObject menuController = GameObject.Find ("MenuController");
+
+			MenuScript menuScript = menuController.GetComponent<MenuScript> ();
+			menuScript.SaveGame ();
+		}
 	
-		if (coral.Count != 0 && gameCounter % 300 == 0 && fish.Count >0) {
+
+
+		if (coral.Count != 0 && gameCounter % 20 == 0 && fish.Count >0) {
+		//>>>>>>> 4e8657992a8de57d83d9d045f70c8fd4ba2365ea
 			fishEat ();
 		}
 
-		if (gameCounter % 500 == 0 && eatingFish.Count > 0) {
+		if (gameCounter % 20 == 0 && eatingFish.Count > 0) {
 			int i = UnityEngine.Random.Range(0,eatingFish.Count);
 			FishScript f = eatingFish [i];
-			eatingFish.Remove (f);
-			f.randFish ();
-		
+            if (f.isEating())
+            {
+                eatingFish.Remove(f);
+                f.randFish();
+            }
+		    
 		}
 
 		if (Input.GetKeyDown (KeyCode.Space)) {
@@ -132,6 +149,10 @@ public class GameScript : MonoBehaviour {
 		}
 	}
 
+	public void addObject(RockScript obj) {
+		this.objects.Add (obj);
+	}
+
 	public void addCoral(CoralScript coral) {
 		this.coral.Add (coral);
 		SoundManager.instance.AddRandomClip ();
@@ -152,4 +173,69 @@ public class GameScript : MonoBehaviour {
 		}
 	}
 
+	public GameData Serialize() {
+		GameData data = new GameData ();
+
+		data.polyps = polyps;
+		data.fossils = fossils;
+		data.gameCounter = gameCounter;
+		data.lastTime = lastTime;
+
+		List<CoralData> coral = new List<CoralData> ();
+
+		foreach(CoralScript c in this.coral) {
+			coral.Add (c.Serialize());
+		}
+
+		List<RockData> objects = new List<RockData> ();
+
+		foreach(RockScript r in this.objects) {
+			objects.Add (r.Serialize());
+		}
+
+		data.coral = coral;
+		data.objects = objects;
+
+		return data;
+	}
+
+	public void Deserialize(GameData data) {
+		polyps = data.polyps;
+		polypText.text = "" + polyps;
+
+		fossils = data.fossils;
+		fossilText.text = "" + fossils;
+
+		gameCounter = data.gameCounter;
+		lastTime = data.lastTime;
+
+		foreach (CoralData c in data.coral) {
+			coral.Add (CoralScript.Deserialize(c));
+		}
+
+		foreach (RockData r in data.objects) {
+			objects.Add (RockScript.Deserialize (r));
+		}
+	}
+}
+
+/**
+ * This represents a serialized version of the game, saving variables
+ * to a separate and serializable-friendly class.
+ */
+[System.Serializable]
+public class GameData {
+	public int polyps;
+	public int fossils;
+	public int gameCounter;
+	public DateTime lastTime;
+
+	public List<FishData> fish;
+	public List<CoralData> coral;
+	public List<RockData> objects;
+
+	public override string ToString() {
+		return "[GameData] polyps: " + polyps + ", fossils: " + fossils + ", gameCounter: "
+		+ gameCounter + " + lastTime: " + lastTime;
+	}
 }

@@ -7,21 +7,24 @@ using System;
 
 public static class SaveLoad {
 
-	public static List<GameScript> savedGames = new List<GameScript>();
+	public static GameData savedGame;
 
 	public static void Save() {
-		savedGames.Add (GameScript.current);
+		// Save the current game as serializable format
+		SaveLoad.savedGame = GameScript.current.Serialize();
 		BinaryFormatter bf = new BinaryFormatter();
-		FileStream file = File.Create (Application.persistentDataPath + "/savedGames.gd");
-		bf.Serialize(file, SaveLoad.savedGames);
+		FileStream file = File.Create (Application.persistentDataPath + "/savedGame.gd");
+		// Perform the serialization
+		bf.Serialize(file, SaveLoad.savedGame);
 		file.Close ();
 	}
 
 	public static void Load() {
-		if(File.Exists(Application.persistentDataPath + "/savedGames.gd")) {
+		if(File.Exists(Application.persistentDataPath + "/savedGame.gd")) {
 			BinaryFormatter bf = new BinaryFormatter();
-			FileStream file = File.Open(Application.persistentDataPath + "/savedGames.gd", FileMode.Open);
-			SaveLoad.savedGames = (List<GameScript>)bf.Deserialize(file);
+			FileStream file = File.Open(Application.persistentDataPath + "/savedGame.gd", FileMode.Open);
+			SaveLoad.savedGame = (GameData)bf.Deserialize(file);
+			GameScript.current.Deserialize (SaveLoad.savedGame);
 			file.Close();
 		}
 	}
