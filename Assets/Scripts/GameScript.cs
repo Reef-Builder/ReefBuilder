@@ -80,7 +80,10 @@ public class GameScript : MonoBehaviour {
 			menuScript.SaveGame ();
 		}
 	
+
+
 		if (coral.Count != 0 && gameCounter % 20 == 0 && fish.Count >0) {
+		//>>>>>>> 4e8657992a8de57d83d9d045f70c8fd4ba2365ea
 			fishEat ();
 		}
 
@@ -97,6 +100,7 @@ public class GameScript : MonoBehaviour {
 
 		if (Input.GetKeyDown (KeyCode.Space)) {
 			addFossils (5);
+			addPolyps (15);
 		}
 	}
 
