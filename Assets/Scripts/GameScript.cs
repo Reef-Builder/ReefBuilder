@@ -39,6 +39,8 @@ public class GameScript : MonoBehaviour {
 	private bool deleteMode = false;
 
 	private List<CoralScript> coral = new List<CoralScript> ();
+	private List<RockScript> objects = new List<RockScript> ();
+
 	private List<FishScript> fish = new List<FishScript> ();
 	private List<FishScript> eatingFish =new List<FishScript> ();
 
@@ -134,6 +136,10 @@ public class GameScript : MonoBehaviour {
 		}
 	}
 
+	public void addObject(RockScript obj) {
+		this.objects.Add (obj);
+	}
+
 	public void addCoral(CoralScript coral) {
 		this.coral.Add (coral);
 		SoundManager.instance.AddRandomClip ();
@@ -168,7 +174,14 @@ public class GameScript : MonoBehaviour {
 			coral.Add (c.Serialize());
 		}
 
+		List<RockData> objects = new List<RockData> ();
+
+		foreach(RockScript r in this.objects) {
+			objects.Add (r.Serialize());
+		}
+
 		data.coral = coral;
+		data.objects = objects;
 
 		return data;
 	}
@@ -186,6 +199,10 @@ public class GameScript : MonoBehaviour {
 		foreach (CoralData c in data.coral) {
 			coral.Add (CoralScript.Deserialize(c));
 		}
+
+		foreach (RockData r in data.objects) {
+			objects.Add (RockScript.Deserialize (r));
+		}
 	}
 }
 
@@ -202,7 +219,7 @@ public class GameData {
 
 	public List<FishData> fish;
 	public List<CoralData> coral;
-	public List<RockData> terrain;
+	public List<RockData> objects;
 
 	public override string ToString() {
 		return "[GameData] polyps: " + polyps + ", fossils: " + fossils + ", gameCounter: "

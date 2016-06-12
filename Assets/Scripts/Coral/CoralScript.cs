@@ -124,6 +124,8 @@ public class CoralScript : MonoBehaviour, Placeable {
 
 		data.prefab = transform.name.Replace ("(Clone)", "");
 
+		data.relativeSize = relativeSize;
+
 		data.localPositionX = transform.localPosition.x;
 		data.localPositionY = transform.localPosition.y;
 		data.localPositionZ = transform.localPosition.z;
@@ -140,15 +142,20 @@ public class CoralScript : MonoBehaviour, Placeable {
 	}
 
 	public static CoralScript Deserialize(CoralData data) {
-		GameObject obj = GameObject.Find (data.prefab);
+		GameObject coral = (GameObject)Instantiate (Resources.Load("Prefabs/GameObjects/" + data.prefab));
 
-		GameObject coral = (GameObject)Instantiate (obj, Vector3.zero, Quaternion.identity);
+		SnapToTerrain snapScript = coral.GetComponent<SnapToTerrain> ();
+		snapScript.HardLock (true);
 
 		coral.transform.localPosition = new Vector3(data.localPositionX, data.localPositionY, data.localPositionZ);
 		coral.transform.localScale = new Vector3(data.localScaleX, data.localScaleY, data.localScaleZ);
 		coral.transform.localEulerAngles = new Vector3(data.localEulerAnglesX, data.localEulerAnglesY, data.localEulerAnglesZ);
 
-		return coral.GetComponent<CoralScript> ();
+		CoralScript coralScript = coral.GetComponent<CoralScript> ();
+
+		coralScript.relativeSize = data.relativeSize;
+
+		return coralScript;
 	}
 }
 
@@ -156,6 +163,8 @@ public class CoralScript : MonoBehaviour, Placeable {
 [System.Serializable]
 public class CoralData {
 	public String prefab;
+
+	public float relativeSize;
 
 	public float localPositionX;
 	public float localPositionY;

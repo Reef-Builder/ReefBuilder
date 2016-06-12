@@ -272,8 +272,6 @@ public class SnapToTerrain : MonoBehaviour {
     */
     public bool SetLocked(bool locked)
     {
-
-
 		SnapToTerrain[] snaps = transform.GetComponentsInChildren<SnapToTerrain> ();
 	
 		if (snaps.Length != 0) {
@@ -300,6 +298,17 @@ public class SnapToTerrain : MonoBehaviour {
         this.locked = locked;
         return true;
     }
+
+	/**
+		This method hard locks the object being placed, regardless of whether it can be placed there or not.
+		This should only ever be used for loading a game, at which point objects should not follow
+		the mouse at all! Never, ever, ever, ever, ever use it in-game.
+
+		Ever!
+	*/
+	public void HardLock(bool locked) {
+		this.locked = locked;
+	}
 
     /**
 
