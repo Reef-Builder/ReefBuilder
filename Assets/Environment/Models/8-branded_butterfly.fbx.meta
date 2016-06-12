@@ -1,17 +1,11 @@
 fileFormatVersion: 2
-<<<<<<< HEAD
-guid: ca6b980a8e110c74e850b6969caf48e9
-timeCreated: 1465722515
-=======
-guid: a6db3a69c4db20743baefe6dcbdb206a
-timeCreated: 1465618717
->>>>>>> 0a853aa940f4e76641a1f79140b5be684048742a
+guid: 7863bfbef547f3e46bcd5a6e9f83e6ac
+timeCreated: 1465726342
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
-<<<<<<< HEAD
     100002: Back1
     100004: Back2
     100006: Back3
@@ -39,36 +33,6 @@ ModelImporter:
     7400000: Take 001
     9500000: //RootNode
     13700000: branded_butterfly
-=======
-    100002: branded_butterfly
-    100004: sailfin_tang_swim:Back1
-    100006: sailfin_tang_swim:Back2
-    100008: sailfin_tang_swim:Back3
-    100010: sailfin_tang_swim:BehindNeck
-    100012: sailfin_tang_swim:Body
-    100014: sailfin_tang_swim:Center
-    100016: sailfin_tang_swim:Mouth
-    100018: sailfin_tang_swim:Neck
-    100020: sailfin_tang_swim:Tail
-    100022: sailfin_tang_swim:TailEnd
-    400000: //RootNode
-    400002: branded_butterfly
-    400004: sailfin_tang_swim:Back1
-    400006: sailfin_tang_swim:Back2
-    400008: sailfin_tang_swim:Back3
-    400010: sailfin_tang_swim:BehindNeck
-    400012: sailfin_tang_swim:Body
-    400014: sailfin_tang_swim:Center
-    400016: sailfin_tang_swim:Mouth
-    400018: sailfin_tang_swim:Neck
-    400020: sailfin_tang_swim:Tail
-    400022: sailfin_tang_swim:TailEnd
-    2300000: branded_butterfly
-    3300000: branded_butterfly
-    4300000: branded_butterfly
-    7400000: Take 001
-    9500000: //RootNode
->>>>>>> 0a853aa940f4e76641a1f79140b5be684048742a
   materials:
     importMaterials: 1
     materialName: 0

@@ -1,17 +1,11 @@
 fileFormatVersion: 2
-<<<<<<< HEAD
-guid: 171d118007ad0fd4c94eecdec9be9475
-timeCreated: 1465719351
-=======
-guid: 6455bf6ce9ae3e140b1d98b6cc02c91b
-timeCreated: 1465617691
->>>>>>> 0a853aa940f4e76641a1f79140b5be684048742a
+guid: 5b2267a504552fc4982d3421e19e3df9
+timeCreated: 1465726350
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
-<<<<<<< HEAD
     100002: imagePlane1
     100004: joint1
     100006: joint10
@@ -49,12 +43,6 @@ ModelImporter:
     4300002: pSphere2
     4300004: pasted__pSphere2
     7400000: Take 001
-=======
-    400000: //RootNode
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: pSphere1
->>>>>>> 0a853aa940f4e76641a1f79140b5be684048742a
     9500000: //RootNode
   materials:
     importMaterials: 1
