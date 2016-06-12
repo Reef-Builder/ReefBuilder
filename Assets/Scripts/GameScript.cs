@@ -100,7 +100,7 @@ public class GameScript : MonoBehaviour {
 
 		if (Input.GetKeyDown (KeyCode.Space)) {
 			addFossils (5);
-			addPolyps (15);
+			addPolyps (100);
 		}
 	}
 
