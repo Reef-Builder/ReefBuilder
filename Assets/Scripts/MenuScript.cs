@@ -16,11 +16,14 @@ public class MenuScript : MonoBehaviour {
 	public Color activeColor;
 	public Color inactiveColor;
 
+	private bool load = false;
+
 	private bool coralMenuVisible = true;
 
 	// Use this for initialization
-	void Start () {
-	
+	void Awake () {
+		GameScript.current = GameObject.FindObjectOfType<GameScript> ();
+		DontDestroyOnLoad(transform.gameObject);
 	}
 	
 	// Update is called once per frame
@@ -33,7 +36,15 @@ public class MenuScript : MonoBehaviour {
 	}
 
 	public void LoadGame() {
-		SaveLoad.Load ();
+		SceneManager.LoadScene ("MainGame");
+		load = true;
+	}
+
+	public void OnLevelWasLoaded(int level) {
+		if (load) {
+			SaveLoad.Load ();
+			load = false;
+		}
 	}
 
 	public void SaveGame() {

@@ -47,22 +47,11 @@ public class SnapToTerrain : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-		prevScale = transform.localScale;
+		
 	}
 	
 	// Update is called once per frame
 	void Update () {
-
-		if (!transform.localScale.Equals (prevScale)) {
-			transform.Translate (-positionOffset);
-			Vector3 diff = (transform.localScale - prevScale);
-			float mag = diff.magnitude;
-			float newMag = transform.localScale.magnitude;
-			float oldMag = prevScale.magnitude;
-			positionOffset.Scale (new Vector3(newMag/oldMag, newMag/oldMag, newMag/oldMag));
-			transform.Translate (positionOffset);
-			prevScale = transform.localScale;
-		}
 
         if (locked)
         {
@@ -272,8 +261,6 @@ public class SnapToTerrain : MonoBehaviour {
     */
     public bool SetLocked(bool locked)
     {
-
-
 		SnapToTerrain[] snaps = transform.GetComponentsInChildren<SnapToTerrain> ();
 	
 		if (snaps.Length != 0) {
@@ -300,6 +287,17 @@ public class SnapToTerrain : MonoBehaviour {
         this.locked = locked;
         return true;
     }
+
+	/**
+		This method hard locks the object being placed, regardless of whether it can be placed there or not.
+		This should only ever be used for loading a game, at which point objects should not follow
+		the mouse at all! Never, ever, ever, ever, ever use it in-game.
+
+		Ever!
+	*/
+	public void HardLock(bool locked) {
+		this.locked = locked;
+	}
 
 	public bool isLocked(){
 		return locked;

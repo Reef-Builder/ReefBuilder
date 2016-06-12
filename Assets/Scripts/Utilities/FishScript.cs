@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[System.Serializable]
 public class FishScript : MonoBehaviour {
 
     private float speed = 10;
@@ -202,5 +201,19 @@ public class FishScript : MonoBehaviour {
         return mode == EATMODE;
     }
 
+	public FishData Serialize() {
+		FishData data = new FishData ();
+
+		return data;
+	}
+
+	public void Deserialize(FishData data) {
+
+	}
+
+}
+
+[System.Serializable]
+public class FishData {
 
 }

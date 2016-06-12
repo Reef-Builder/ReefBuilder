@@ -8,10 +8,9 @@ using System.Collections.Generic;
  * This script handles the main game objects, including the players currency and
  * the tracking of time.
  */
-[System.Serializable]
 public class GameScript : MonoBehaviour {
 
-	public static GameScript current;
+	public static GameScript current = GameObject.FindObjectOfType<GameScript> ();
 
 	// This is the text to update with the players currency amount.
 	public Text polypText;
@@ -40,13 +39,15 @@ public class GameScript : MonoBehaviour {
 	private bool deleteMode = false;
 
 	private List<CoralScript> coral = new List<CoralScript> ();
+	private List<RockScript> objects = new List<RockScript> ();
+
 	private List<FishScript> fish = new List<FishScript> ();
 	private List<FishScript> eatingFish =new List<FishScript> ();
 
 //	private HashSet<FishScript> eatingFish = new HashSet<FishScript> ();
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		polypText.text = "" + polyps;
 		fossilText.text = "" + fossils;
 
@@ -135,6 +136,10 @@ public class GameScript : MonoBehaviour {
 		}
 	}
 
+	public void addObject(RockScript obj) {
+		this.objects.Add (obj);
+	}
+
 	public void addCoral(CoralScript coral) {
 		this.coral.Add (coral);
 		SoundManager.instance.AddRandomClip ();
@@ -155,4 +160,69 @@ public class GameScript : MonoBehaviour {
 		}
 	}
 
+	public GameData Serialize() {
+		GameData data = new GameData ();
+
+		data.polyps = polyps;
+		data.fossils = fossils;
+		data.gameCounter = gameCounter;
+		data.lastTime = lastTime;
+
+		List<CoralData> coral = new List<CoralData> ();
+
+		foreach(CoralScript c in this.coral) {
+			coral.Add (c.Serialize());
+		}
+
+		List<RockData> objects = new List<RockData> ();
+
+		foreach(RockScript r in this.objects) {
+			objects.Add (r.Serialize());
+		}
+
+		data.coral = coral;
+		data.objects = objects;
+
+		return data;
+	}
+
+	public void Deserialize(GameData data) {
+		polyps = data.polyps;
+		polypText.text = "" + polyps;
+
+		fossils = data.fossils;
+		fossilText.text = "" + fossils;
+
+		gameCounter = data.gameCounter;
+		lastTime = data.lastTime;
+
+		foreach (CoralData c in data.coral) {
+			coral.Add (CoralScript.Deserialize(c));
+		}
+
+		foreach (RockData r in data.objects) {
+			objects.Add (RockScript.Deserialize (r));
+		}
+	}
+}
+
+/**
+ * This represents a serialized version of the game, saving variables
+ * to a separate and serializable-friendly class.
+ */
+[System.Serializable]
+public class GameData {
+	public int polyps;
+	public int fossils;
+	public int gameCounter;
+	public DateTime lastTime;
+
+	public List<FishData> fish;
+	public List<CoralData> coral;
+	public List<RockData> objects;
+
+	public override string ToString() {
+		return "[GameData] polyps: " + polyps + ", fossils: " + fossils + ", gameCounter: "
+		+ gameCounter + " + lastTime: " + lastTime;
+	}
 }
