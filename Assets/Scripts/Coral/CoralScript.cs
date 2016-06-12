@@ -167,7 +167,6 @@ public class CoralScript : MonoBehaviour, Placeable {
 		CoralScript coralScript = coral.GetComponent<CoralScript> ();
 
 		coralScript.relativeSize = data.relativeSize;
-		print (data.relativeSize);
 		coralScript.originalScale = new Vector3 (data.originalScaleX, data.originalScaleY, data.originalScaleZ);
 
 		return coralScript;

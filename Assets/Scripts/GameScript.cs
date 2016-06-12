@@ -35,6 +35,9 @@ public class GameScript : MonoBehaviour {
 	// when gameCounter reaches X. The gameCounter can also be tracked separately,
 	// for example to trigger Y when gameCounter increases by X.
 	private int gameCounter = 0;
+	private int saveCounter = 0;
+
+	private int saveRate = 100;
 
 	private bool deleteMode = false;
 
@@ -69,6 +72,13 @@ public class GameScript : MonoBehaviour {
 			lastTime = currentTime;
 		}
 	
+		if((gameCounter - saveCounter) >= saveRate) {
+			saveCounter = gameCounter;
+			GameObject menuController = GameObject.Find ("MenuController");
+
+			MenuScript menuScript = menuController.GetComponent<MenuScript> ();
+			menuScript.SaveGame ();
+		}
 	
 		if (coral.Count != 0 && gameCounter % 20 == 0 && fish.Count >0) {
 			fishEat ();
