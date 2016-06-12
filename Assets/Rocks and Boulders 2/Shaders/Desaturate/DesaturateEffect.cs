@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityStandardAssets.ImageEffects;
 
 [ExecuteInEditMode]
 [AddComponentMenu("Image Effects/Desaturate")]
