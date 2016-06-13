@@ -4,7 +4,7 @@ using System.Collections;
 public class PolypScript : MonoBehaviour {
 
     public int polypsReceived = 1;
-    private Vector3 rotation = new Vector3(90, 0, 0);
+    private Vector3 rotation = new Vector3(0, 0, 0);
 	// Use this for initialization
 	void Start () {
         
