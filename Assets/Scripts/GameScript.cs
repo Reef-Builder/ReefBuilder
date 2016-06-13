@@ -37,7 +37,8 @@ public class GameScript : MonoBehaviour {
 	private int gameCounter = 0;
 	private int saveCounter = 0;
 
-	private int saveRate = 100;
+	// Every 1000 ticks, the game will automatically save. Just in case bad things happen!
+	private int saveRate = 1000;
 
 	private bool deleteMode = false;
 
@@ -79,11 +80,8 @@ public class GameScript : MonoBehaviour {
 			MenuScript menuScript = menuController.GetComponent<MenuScript> ();
 			menuScript.SaveGame ();
 		}
-	
-
 
 		if (coral.Count != 0 && gameCounter % 20 == 0 && fish.Count >0) {
-		//>>>>>>> 4e8657992a8de57d83d9d045f70c8fd4ba2365ea
 			fishEat ();
 		}
 
