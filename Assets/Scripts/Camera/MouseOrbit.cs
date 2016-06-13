@@ -78,6 +78,10 @@ public class MouseOrbit : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape)) {
             fullControl = false;
+            if (target.tag.Equals("Controllable"))
+            {
+                target.GetComponent<FullControl>().active = false;
+            }
         }
 
         if (Input.GetKeyUp(KeyCode.Alpha1))
@@ -256,10 +260,7 @@ public class MouseOrbit : MonoBehaviour
 
     public void FlyTo(Transform target){
 
-        if (this.target.tag.Equals("Controllable"))
-        {
-            this.target.GetComponent<FullControl>().active = false;
-        }
+       
 
         this.target = target;
         newTarget = true;
