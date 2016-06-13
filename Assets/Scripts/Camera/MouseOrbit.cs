@@ -8,7 +8,14 @@ public class MouseOrbit : MonoBehaviour
 {
     public Transform hiddenTarget;
     public Transform target;
+
+    private bool fullControl = false;
+    private Vector3 fullControlViewAngle = new Vector3(90, -45, 0);
+    private float fullControlDistance = 10;
+    private Transform fullControlTarget;
+
     public float distance = 15.0f;
+    
     public float xSpeed = 120.0f;
     public float ySpeed = 120.0f;
 
@@ -69,6 +76,14 @@ public class MouseOrbit : MonoBehaviour
     void LateUpdate()
     {
 
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            fullControl = false;
+            if (target.tag.Equals("Controllable"))
+            {
+                target.GetComponent<FullControl>().active = false;
+            }
+        }
+
         if (Input.GetKeyUp(KeyCode.Alpha1))
         {
             flySpeed = 10;
@@ -82,6 +97,32 @@ public class MouseOrbit : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.Alpha3))
         {
             flySpeed = -1;
+        }
+
+        if (fullControl) {
+
+            Vector3 targetPos = fullControlTarget.position;
+            fullControlTarget.LookAt(target);
+            Quaternion targetRot = fullControlTarget.rotation;
+
+            Vector3 newPos = Vector3.Lerp(transform.position, targetPos, Time.deltaTime);
+            Vector3 newEuler = targetRot.eulerAngles;
+
+            x = Mathf.LerpAngle(x, newEuler.y, Time.deltaTime);
+            y = Mathf.LerpAngle(y, newEuler.x, Time.deltaTime);
+
+            transform.rotation = Quaternion.Euler(y, x, 0);
+            transform.position = newPos;
+
+            float newDist = (target.position - fullControlTarget.position).magnitude;
+
+            hiddenTarget.position = target.position;
+            distance = (transform.position - hiddenTarget.position).magnitude;
+
+            if ((targetPos - transform.position).magnitude < 2.0f) {
+               // fullControl = false;
+            }
+            return;
         }
 
         if (newTarget){
@@ -100,11 +141,9 @@ public class MouseOrbit : MonoBehaviour
             }
 
           //  return;
-        }
-
-        if (!newTarget && EventSystem.current.IsPointerOverGameObject())
+        } else
         {
-            return;
+            hiddenTarget.position = target.position;
         }
 
 		if (locked && !newTarget)
@@ -133,7 +172,7 @@ public class MouseOrbit : MonoBehaviour
             float lastY = y;
             float lastDistance = distance;
 
-            if (!locked && Input.GetMouseButton(0))
+            if (!fullControl && !locked && Input.GetMouseButton(0) && !EventSystem.current.IsPointerOverGameObject())
             {
                 x += Input.GetAxis("Mouse X") * xSpeed * distance * 0.5f;
                 y -= Input.GetAxis("Mouse Y") * ySpeed * 0.5f;
@@ -178,7 +217,7 @@ public class MouseOrbit : MonoBehaviour
 
             Quaternion rotation = transform.rotation;
 
-            if (!locked && Input.touchCount == 1)
+            if (!fullControl && !locked && Input.touchCount == 1 && !EventSystem.current.IsPointerOverGameObject())
             {
 
                 xDeltas.Add(Input.GetTouch(0).deltaPosition.x * xSpeed * distance * Time.deltaTime);
@@ -220,6 +259,9 @@ public class MouseOrbit : MonoBehaviour
     }
 
     public void FlyTo(Transform target){
+
+       
+
         this.target = target;
         newTarget = true;
         distToNewTarget = (target.position - hiddenTarget.position).magnitude;
@@ -268,6 +310,14 @@ public class MouseOrbit : MonoBehaviour
     public void lockCamera(bool locked)
     {
         this.locked = locked;
+    }
+
+    /** Sets the camera to full control mode.  This locks the camera at a specific rotation from the target.  Pressing escape will turn this off. */
+    public void setFullControl(bool fullControl) {
+        this.fullControl = fullControl;
+        if (fullControl == true) {
+            fullControlTarget = target.FindChild("Body").FindChild("follow");
+        }
     }
 
 }

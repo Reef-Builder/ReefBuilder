@@ -8,6 +8,9 @@ public class MenuScript : MonoBehaviour {
 	// The menu objects to toggle between
 	public GameObject coralMenu;
 	public GameObject miscMenu;
+	public GameObject gameMenu;
+	public GameObject gameMenuExpanded;
+	public GameObject resourceMenu;
 
 	// The toggle objects which switch between tabs
 	public GameObject coralToggle;
@@ -17,8 +20,8 @@ public class MenuScript : MonoBehaviour {
 	public Color inactiveColor;
 
 	private bool load = false;
-
 	private bool coralMenuVisible = true;
+	private bool menuOpen = false;
 
 	// Use this for initialization
 	void Awake () {
@@ -51,12 +54,41 @@ public class MenuScript : MonoBehaviour {
 		SaveLoad.Save ();
 	}
 
+	public void SaveAndExit() {
+		SaveLoad.Save ();
+		SceneManager.LoadScene ("Menu");
+	}
+
 	public void ReturnToMenu() {
 		SceneManager.LoadScene ("Menu");
 	}
 
 	public void ExitGame() {
 		Application.Quit();
+	}
+
+	public void DisplayGame() {
+		gameMenuExpanded.SetActive (false);
+		gameMenu.SetActive (true);
+		resourceMenu.SetActive (true);
+		menuOpen = false;
+	}
+
+	public void DisplayMenu() {
+		gameMenuExpanded.SetActive (true);
+		gameMenu.SetActive (false);
+		resourceMenu.SetActive (false);
+		menuOpen = true;
+	}
+
+	public void ToggleGameMenu() {
+		// The menu is currently open, so should be closed!
+		if (menuOpen) {
+			DisplayGame ();
+		} else {
+			DisplayMenu ();
+		}
+
 	}
 
 	public void SwitchMenuMode(bool mode) {
