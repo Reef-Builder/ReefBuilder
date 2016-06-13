@@ -58,7 +58,7 @@ public class RayScript : MonoBehaviour {
 			speed = -speed;
 		}
 
-		transform.Translate(0, 0, -speed * Time.deltaTime);
+		transform.Translate(-speed * Time.deltaTime, 0,0 );
 		transform.Rotate(new Vector3(xRot, currYRot, zRot) * Time.deltaTime);
 
 		if (positiveZ)
