@@ -50,6 +50,12 @@ public class TargetLock : MonoBehaviour {
 
                 MouseOrbit orbit = Camera.main.GetComponent<MouseOrbit>();
                 orbit.FlyTo(closest);
+                if (closest.tag.Equals("Controllable")) {
+                    orbit.setFullControl(true);
+                    closest.GetComponent<FullControl>().active = true;
+                } else {
+                    orbit.setFullControl(false);
+                }   
 
                // Camera.main.GetComponent<MouseOrbit>().distance = 15;
             }

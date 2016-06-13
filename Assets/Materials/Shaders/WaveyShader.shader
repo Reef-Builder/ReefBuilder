@@ -77,27 +77,7 @@
                 UNITY_APPLY_FOG(i.fogCoord, col);
                 UNITY_OPAQUE_ALPHA(col.a);
 
-				// Caustics projection for texels below water level - provided license free by dualheights
-				float4 s = i.vertex;
-				if (s.y < _CausticsStartLevel) {
-					// Move the caustics in world space
-					float3 drift = _CausticsDrift * _Time.y;
-					// Fade out caustics for shallow water
-					float fadeFactor = min(1.0f,
-						(_CausticsStartLevel - s.y) /
-						_CausticsShallowFadeDistance);
-					// Remove caustics on half bottom of objects, i.e. no caustics "from below"
-					float3 upVec = float3(0, 1, 0);
-					float belowFactor = min(1.0f, max(0.0f, dot(s.w, upVec) + 0.5f));
-					// Calculate the projected texture coordinate in the caustics texture
-					float3 worldCoord = (s + drift) / _CausticsScale;
-					float2 causticsTextureCoord = mul(worldCoord, _CausticsLightOrientation).xy;
-					// Calculate caustics light emission
-					float3 toAdd = Emission(causticsTextureCoord) * fadeFactor * belowFactor;
-					col = float4(toAdd.r, toAdd.g, toAdd.b, 1);
-
-					//col += float4(1.0, 1.0, 1.0, 1.0)*(1.0-_Health);
-				}
+				col += _EmissionColor;
 
                 return col;
             }
