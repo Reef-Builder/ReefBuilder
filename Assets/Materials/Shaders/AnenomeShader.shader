@@ -1,4 +1,6 @@
-﻿Shader "Custom/Anenome Shader"
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "Custom/Anenome Shader"
 {
 	Properties
 	{
@@ -55,7 +57,7 @@
 			o.vertex.z += delta;
 			v.vertex.z -= delta;
 		}
-		o.vertex = mul(UNITY_MATRIX_MVP, o.vertex);
+		o.vertex = UnityObjectToClipPos(o.vertex);
 
 
 		o.uv = v.texcoord;

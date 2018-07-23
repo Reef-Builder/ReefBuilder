@@ -8,10 +8,7 @@ using System.Collections.Generic;
  * This script handles the main game objects, including the players currency and
  * the tracking of time.
  */
-public class GameScript : MonoBehaviour {
-
-	public static GameScript current = GameObject.FindObjectOfType<GameScript> ();
-
+public class GameScript : Singleton<GameScript> {
 	// This is the text to update with the players currency amount.
 	public Text polypText;
 	public Text fossilText;
@@ -37,8 +34,8 @@ public class GameScript : MonoBehaviour {
 	private int gameCounter = 0;
 	private int saveCounter = 0;
 
-	// Every 1000 ticks, the game will automatically save. Just in case bad things happen!
-	private int saveRate = 1000;
+	private float saveEverySeconds = 1;
+    private float lastSave = 0;
 
 	private bool deleteMode = false;
 
@@ -60,7 +57,12 @@ public class GameScript : MonoBehaviour {
 		// For now, will just keep track of current in-game time. 
 		currentTime = DateTime.Now;
 		lastTime = DateTime.Now;
-	}
+
+        if (SaveLoad.SaveExists(PersistentSettings.Instance.SaveGameId))
+        {
+            SaveLoad.Load(PersistentSettings.Instance.SaveGameId);
+        }
+    }
 
 	// Update is called once per frame
 	void Update () {
@@ -73,12 +75,14 @@ public class GameScript : MonoBehaviour {
 			lastTime = currentTime;
 		}
 	
-		if((gameCounter - saveCounter) >= saveRate) {
+		if((Time.time - lastSave) >= saveEverySeconds) {
 			saveCounter = gameCounter;
 			GameObject menuController = GameObject.Find ("MenuController");
 
 			MenuScript menuScript = menuController.GetComponent<MenuScript> ();
-			menuScript.SaveGame ();
+			menuScript.SaveCurrentGame ();
+
+            lastSave = Time.time;
 		}
 
 		if (coral.Count != 0 && gameCounter % 20 == 0 && fish.Count >0) {

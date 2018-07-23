@@ -19,13 +19,12 @@ public class MenuScript : MonoBehaviour {
 	public Color activeColor;
 	public Color inactiveColor;
 
-	private bool load = false;
+	private int game = 0;
 	private bool coralMenuVisible = true;
 	private bool menuOpen = false;
 
 	// Use this for initialization
-	void Awake () {
-		GameScript.current = GameObject.FindObjectOfType<GameScript> ();
+	void Start () {
 		DontDestroyOnLoad(transform.gameObject);
 	}
 	
@@ -34,28 +33,25 @@ public class MenuScript : MonoBehaviour {
 		
 	}
 
-	public void NewGame() {
+	public void NewGame(int game) {
 		SceneManager.LoadScene ("MainGame");
+        this.game = game;
 	}
 
-	public void LoadGame() {
-		SceneManager.LoadScene ("MainGame");
-		load = true;
-	}
+	public void LoadGame(int game) {
+        this.game = game;
 
-	public void OnLevelWasLoaded(int level) {
-		if (load) {
-			SaveLoad.Load ();
-			load = false;
-		}
-	}
+        PersistentSettings.Instance.SaveGameId = this.game;
 
-	public void SaveGame() {
-		SaveLoad.Save ();
+		SceneManager.LoadScene ("MainGame");    
+    }
+
+	public void SaveCurrentGame() {
+		SaveLoad.Save (game);
 	}
 
 	public void SaveAndExit() {
-		SaveLoad.Save ();
+		SaveLoad.Save (game);
 		SceneManager.LoadScene ("Menu");
 	}
 

@@ -1,4 +1,6 @@
-﻿Shader "Custom/Wavey Shader"
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "Custom/Wavey Shader"
 {
     Properties
     {
@@ -51,7 +53,7 @@
                 	o.vertex.z += 0.1f * sin(_Time.y*0.5f + (y*2.0f)) * (y/2.0f);
                 	//v.vertex.z -= _SinTime.w * (v.vertex.z/10.0f) * 20.0f;
                 }
-                o.vertex = mul(UNITY_MATRIX_MVP, o.vertex);
+                o.vertex = UnityObjectToClipPos(o.vertex);
 
 
                 o.uv = v.texcoord;

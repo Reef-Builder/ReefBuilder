@@ -316,7 +316,7 @@ public class MouseOrbit : MonoBehaviour
     public void setFullControl(bool fullControl) {
         this.fullControl = fullControl;
         if (fullControl == true) {
-            fullControlTarget = target.FindChild("Body").FindChild("follow");
+            fullControlTarget = target.Find("Body").Find("follow");
         }
     }
 
