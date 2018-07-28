@@ -116,6 +116,8 @@ public class StoreChest : MonoBehaviour
 
         fog.heightDensity = oldCameraFogDensity;
 
+        UI.SetActive(true);
+
         while (Time.time - startTime < duration)
         {
             var startRotation = Camera.main.transform.eulerAngles;
@@ -136,8 +138,6 @@ public class StoreChest : MonoBehaviour
 
             yield return null;
         }
-
-        canvas.gameObject.SetActive(true);
     }
 
     private IEnumerator CloseLid()
@@ -178,7 +178,6 @@ public class StoreChest : MonoBehaviour
 
     private IEnumerator DoOpenStoreCoroutines()
     {
-        canvas.gameObject.SetActive(false);
         StartCoroutine("OpenLid");
         yield return new WaitForSeconds(0.2f);
         StartCoroutine("MoveCameraToStore");
