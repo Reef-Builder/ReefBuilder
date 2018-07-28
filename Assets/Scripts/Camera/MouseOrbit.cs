@@ -68,6 +68,12 @@ public class MouseOrbit : MonoBehaviour
             rb.freezeRotation = true;
         }
         hiddenTarget = new GameObject().transform;
+
+        if(target == null)
+        {
+            return;
+        }
+
         hiddenTarget.position = target.position;
        // newTarget = true;
         Orbit(hiddenTarget);
@@ -75,6 +81,9 @@ public class MouseOrbit : MonoBehaviour
 
     void LateUpdate()
     {
+        if(target == null) {
+            return;
+        }
 
         if (Input.GetKeyDown(KeyCode.Escape)) {
             fullControl = false;
@@ -258,10 +267,8 @@ public class MouseOrbit : MonoBehaviour
         }
     }
 
-    public void FlyTo(Transform target){
-
-       
-
+    public void FlyTo(Transform target)
+    {
         this.target = target;
         newTarget = true;
         distToNewTarget = (target.position - hiddenTarget.position).magnitude;
