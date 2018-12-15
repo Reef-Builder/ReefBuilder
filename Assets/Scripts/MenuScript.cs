@@ -23,9 +23,17 @@ public class MenuScript : MonoBehaviour {
 	private bool coralMenuVisible = true;
 	private bool menuOpen = false;
 
-	// Use this for initialization
-	void Start () {
+    private float originalAnchorMinY;
+    public float anchorMinYToRemoveWhenDisabled = 0.005f;
+
+    // Use this for initialization
+    void Start () {
 		DontDestroyOnLoad(transform.gameObject);
+
+        originalAnchorMinY = coralToggle.GetComponent<RectTransform>().anchorMin.y;
+
+        coralMenuVisible = !coralMenuVisible;
+        SwitchMenuMode(!coralMenuVisible);
 	}
 	
 	// Update is called once per frame
@@ -87,21 +95,39 @@ public class MenuScript : MonoBehaviour {
 
 	}
 
-	public void SwitchMenuMode(bool mode) {
-		coralMenuVisible = mode;
+	public void SwitchMenuMode(bool coralMenuVisible) {
 
-		if (coralMenuVisible) {
+        if(coralMenuVisible == this.coralMenuVisible)
+        {
+            return;
+        }
+
+		this.coralMenuVisible = coralMenuVisible;
+
+        RectTransform enabledPanel = null;
+        RectTransform disabledPanel = null;
+
+        if (coralMenuVisible) {
 			coralMenu.SetActive (true);
 			miscMenu.SetActive (false);
 
-			coralToggle.GetComponent<Image> ().color = activeColor;
-			miscToggle.GetComponent<Image> ().color = inactiveColor;
-		} else {
+			coralToggle.GetComponent<Image>().color = activeColor;
+			miscToggle.GetComponent<Image>().color = inactiveColor;
+
+            enabledPanel = coralToggle.GetComponent<RectTransform>();
+            disabledPanel = miscToggle.GetComponent<RectTransform>();
+        } else {
 			coralMenu.SetActive (false);
 			miscMenu.SetActive (true);
 
 			coralToggle.GetComponent<Image> ().color = inactiveColor;
 			miscToggle.GetComponent<Image> ().color = activeColor;
-		}
-	}
+
+            enabledPanel = miscToggle.GetComponent<RectTransform>();
+            disabledPanel = coralToggle.GetComponent<RectTransform>();
+        }
+
+        enabledPanel.anchorMin = new Vector2(enabledPanel.anchorMin.x, originalAnchorMinY);
+        disabledPanel.anchorMin = new Vector2(disabledPanel.anchorMin.x, originalAnchorMinY + anchorMinYToRemoveWhenDisabled);
+    }
 }
